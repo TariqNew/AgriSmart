@@ -3,7 +3,8 @@ const express = require('express');
 const ussdHandler = require('./ussd-sms-backend/ussdHandler');
 const smsHandler = require('./agribot/smsHandler');
 const weather = require('./openweather/openweather');
-const cors = require('cors')
+const cors = require('cors');
+const smsHandlerWeb = require('./agribot/utils/smsHandlerWeb');
 const dotenv = require("dotenv").config()
 
 
@@ -24,6 +25,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Incoming SMS webhook endpoint for Africa's Talking
 app.post('/incoming-sms', smsHandler);
+
+// Incoming SMS webhook endpoint for Africa's Talking
+app.post('/incoming-sms-web', smsHandlerWeb);
 
 //Endpoint for ussd 
 app.post('/ussd', ussdHandler)
