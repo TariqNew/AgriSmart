@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/login.css">
+    <title>Log in</title>
+    <style>
+      body {
+        background: linear-gradient(120deg, #b2dfdb 0%, #388e3c 100%);
+        min-height: 100vh;
+        margin: 0;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .login-container {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 8px 32px #b2dfdb88;
+        max-width: 370px;
+        width: 100%;
+        padding: 38px 32px 28px 32px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .login-logo {
+        width: 64px;
+        height: 64px;
+        border-radius: 16px;
+        margin-bottom: 18px;
+        object-fit: cover;
+        box-shadow: 0 2px 12px #b2dfdb55;
+      }
+      .login-title {
+        font-size: 2em;
+        color: #388e3c;
+        font-weight: 700;
+        margin-bottom: 6px;
+        letter-spacing: -1px;
+      }
+      .login-subtitle {
+        color: #388e3c;
+        font-size: 1.08em;
+        margin-bottom: 24px;
+        text-align: center;
+      }
+      .login-input, .guest-input {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 8px;
+        border: 1px solid #b2dfdb;
+        font-size: 1em;
+        margin-bottom: 16px;
+        transition: border 0.2s;
+      }
+      .login-input:focus, .guest-input:focus {
+        border: 1.5px solid #388e3c;
+        outline: none;
+      }
+      .login-btn, .guest-btn {
+        width: 100%;
+        padding: 12px 0;
+        border-radius: 8px;
+        border: none;
+        font-size: 1.08em;
+        font-weight: 600;
+        cursor: pointer;
+        margin-bottom: 10px;
+        transition: background 0.2s, color 0.2s;
+      }
+      .login-btn {
+        background: #388e3c;
+        color: #fff;
+      }
+      .login-btn:hover {
+        background: #2e7030;
+      }
+      .guest-btn {
+        background: #b2dfdb;
+        color: #388e3c;
+      }
+      .guest-btn:hover {
+        background: #388e3c;
+        color: #fff;
+      }
+      .copyRight {
+        font-size: 0.95em;
+        color: #388e3c;
+        text-align: center;
+        margin-top: 18px;
+      }
+    </style>
+</head>
+<body>
+  <div class="login-container">
+    <!-- Language Selector -->
+    <select id="languageSelect" style="margin-bottom:18px;width:100%;padding:10px 12px;border-radius:8px;border:1px solid #b2dfdb;font-size:1em;color:#388e3c;">
+      <option value="en">English</option>
+      <option value="sw">Kiswahili</option>
+    </select>
+    <img src="farm pics/field.jpg" alt="AgriSmart" class="login-logo">
+    <div class="login-title" id="loginTitle">Welcome to AgriSmart</div>
+    <div class="login-subtitle" id="loginSubtitle">
+      Get personalized insights and advice for your farm.<br>
+      Sign up or continue as a guest.
+    </div>
+    <input type="text" name="Username" placeholder="Email or Phone" class="login-input" id="signupInput" autocomplete="username">
+    <button class="login-btn" id="signupBtn">Sign Up</button>
+    <div id="orText" style="width:100%;text-align:center;color:#888;margin:10px 0 8px 0;">or</div>
+    <button class="guest-btn" id="guestBtn">Continue as Guest</button>
+    <div class="copyRight" id="copyRight">
+      By continuing, you agree to our Terms of Service and<br>
+      Privacy Policy
+    </div>
+  </div>
+  <script>
+    // Swahili translations for login page
+    const swahiliStrings = {
+      "Welcome to AgriSmart": "Karibu AgriSmart",
+      "Get personalized insights and advice for your farm.<br>Sign up or continue as a guest.": "Pata maarifa na ushauri maalum kwa shamba lako.<br>Jisajili au endelea kama mgeni.",
+      "Email or Phone": "Barua Pepe au Simu",
+      "Sign Up": "Jisajili",
+      "or": "au",
+      "Continue as Guest": "Endelea Kama Mgeni",
+      "By continuing, you agree to our Terms of Service and<br>Privacy Policy": "Kwa kuendelea, unakubali Masharti ya Huduma na<br>Sera ya Faragha",
+      "Please enter your email or phone.": "Tafadhali weka barua pepe au namba ya simu."
+    };
+
+    // Language selector logic
+    const langSel = document.getElementById('languageSelect');
+    langSel.value = localStorage.getItem('agriLang') || 'en';
+
+    function translateLoginToSwahili() {
+      document.getElementById('loginTitle').textContent = swahiliStrings["Welcome to AgriSmart"];
+      document.getElementById('loginSubtitle').innerHTML = swahiliStrings["Get personalized insights and advice for your farm.<br>Sign up or continue as a guest."];
+      document.getElementById('signupInput').placeholder = swahiliStrings["Email or Phone"];
+      document.getElementById('signupBtn').textContent = swahiliStrings["Sign Up"];
+      document.getElementById('orText').textContent = swahiliStrings["or"];
+      document.getElementById('guestBtn').textContent = swahiliStrings["Continue as Guest"];
+      document.getElementById('copyRight').innerHTML = swahiliStrings["By continuing, you agree to our Terms of Service and<br>Privacy Policy"];
+    }
+    function translateLoginToEnglish() {
+      document.getElementById('loginTitle').textContent = "Welcome to AgriSmart";
+      document.getElementById('loginSubtitle').innerHTML = "Get personalized insights and advice for your farm.<br>Sign up or continue as a guest.";
+      document.getElementById('signupInput').placeholder = "Email or Phone";
+      document.getElementById('signupBtn').textContent = "Sign Up";
+      document.getElementById('orText').textContent = "or";
+      document.getElementById('guestBtn').textContent = "Continue as Guest";
+      document.getElementById('copyRight').innerHTML = "By continuing, you agree to our Terms of Service and<br>Privacy Policy";
+    }
+
+    // On language change
+    langSel.onchange = function() {
+      localStorage.setItem('agriLang', this.value);
+      if (this.value === 'sw') {
+        translateLoginToSwahili();
+      } else {
+        translateLoginToEnglish();
+      }
+    };
+
+    // On page load, set language
+    window.addEventListener('DOMContentLoaded', function() {
+      if (langSel.value === 'sw') translateLoginToSwahili();
+      // If user is already logged in, redirect to home
+      if (localStorage.getItem('userEmail')) {
+        window.location.href = 'home.html';
+      }
+      // Dark mode logic
+      const darkMode = localStorage.getItem('darkMode') === 'true';
+      document.body.classList.toggle('dark-mode', darkMode);
+    });
+
+    document.getElementById('signupBtn').onclick = function() {
+      const val = document.getElementById('signupInput').value.trim();
+      if(val) {
+        localStorage.setItem('userEmail', val); // Save email
+        window.location.href = 'user-profile.html'; // Redirect to profile after signup
+      } else {
+        if (langSel.value === 'sw') {
+          alert(swahiliStrings["Please enter your email or phone."]);
+        } else {
+          alert("Please enter your email or phone.");
+        }
+      }
+    };
+    document.getElementById('guestBtn').onclick = function() {
+      localStorage.removeItem('userEmail'); // Remove email for guest
+      window.location.href = 'home.html';
+    };
+  </script>
+</body>
+</html>

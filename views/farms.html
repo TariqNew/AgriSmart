@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Farms - AgriAi</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #e0ffe0;
+      margin: 0;
+      padding: 0;
+    }
+    .farms-container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px #b2dfdb88;
+      padding: 32px 28px 24px 28px;
+    }
+    h1 {
+      color: #388e3c;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    .farm-form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .farm-form input {
+      flex: 1;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #b2dfdb;
+      font-size: 1em;
+      min-width: 120px;
+    }
+    .farm-form button {
+      background: #388e3c;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .farm-form button:hover {
+      background: #2e7030;
+    }
+    .farms-list {
+      margin-top: 18px;
+    }
+    .farm {
+      background: #f4fef4;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 8px #b2dfdb33;
+    }
+    .farm .meta {
+      font-size: 0.95em;
+      color: #388e3c;
+      margin-bottom: 6px;
+    }
+    .farm .details {
+      font-size: 1.08em;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+  <div class="farms-container">
+    <h1>My Farms</h1>
+    <form class="farm-form" id="farmForm" autocomplete="off">
+      <input type="text" id="farmName" placeholder="Farm Name" required>
+      <input type="text" id="farmLocation" placeholder="Location" required>
+      <input type="number" id="farmSize" placeholder="Size (acres)" min="0" step="0.01" required>
+      <input type="text" id="farmCrops" placeholder="Crops (comma separated)" required>
+      <button type="submit">Add Farm</button>
+    </form>
+    <div class="farms-list" id="farmsList"></div>
+
+    <!-- Edit Farm Modal -->
+    <div id="editFarmModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.25); z-index:9999; align-items:center; justify-content:center;">
+      <div style="background:#fff; border-radius:14px; box-shadow:0 4px 24px #b2dfdb88; padding:28px 24px; min-width:320px; max-width:90vw;">
+        <h2 style="color:#388e3c; margin-top:0;">Edit Farm</h2>
+        <form id="editFarmForm" style="display:flex; flex-direction:column; gap:12px;">
+          <input type="text" id="editFarmName" placeholder="Farm Name" required>
+          <input type="text" id="editFarmLocation" placeholder="Location" required>
+          <input type="number" id="editFarmSize" placeholder="Size (acres)" min="0" step="0.01" required>
+          <input type="text" id="editFarmCrops" placeholder="Crops (comma separated)" required>
+          <div style="display:flex; gap:10px; margin-top:8px;">
+            <button type="submit" style="flex:1; background:#388e3c; color:#fff; border:none; border-radius:8px; padding:10px 0; font-size:1em; cursor:pointer;">Save</button>
+            <button type="button" id="cancelEditBtn" style="flex:1; background:#b2dfdb; color:#388e3c; border:none; border-radius:8px; padding:10px 0; font-size:1em; cursor:pointer;">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Load farms from localStorage
+    function loadFarms() {
+      const farms = JSON.parse(localStorage.getItem('farmsList') || '[]');
+      const farmsDiv = document.getElementById('farmsList');
+      farmsDiv.innerHTML = '';
+      farms.reverse().forEach((farm, idx) => {
+        // Calculate the real index in the original array
+        const realIdx = farms.length - 1 - idx;
+        const div = document.createElement('div');
+        div.className = 'farm';
+        div.innerHTML = `
+          <div class="meta">${farm.name} • ${farm.location} • ${farm.size} acres</div>
+          <div class="details">Crops: ${farm.crops || '-'}<br>Added: ${new Date(farm.time).toLocaleString()}</div>
+          <button class="edit-btn" data-idx="${realIdx}" style="margin-top:8px; background:#388e3c; color:#fff; border:none; border-radius:6px; padding:6px 16px; cursor:pointer;">Edit</button>
+        `;
+        farmsDiv.appendChild(div);
+      });
+
+      // Add edit button listeners
+      document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.onclick = function() {
+          const idx = parseInt(this.getAttribute('data-idx'));
+          openEditFarmModal(idx);
+        };
+      });
+    }
+
+    function openEditFarmModal(idx) {
+      let farms = JSON.parse(localStorage.getItem('farmsList') || '[]');
+      const farm = farms[idx];
+      document.getElementById('editFarmName').value = farm.name;
+      document.getElementById('editFarmLocation').value = farm.location;
+      document.getElementById('editFarmSize').value = farm.size;
+      document.getElementById('editFarmCrops').value = farm.crops;
+      document.getElementById('editFarmModal').style.display = 'flex';
+
+      // Save handler
+      document.getElementById('editFarmForm').onsubmit = function(e) {
+        e.preventDefault();
+        farm.name = document.getElementById('editFarmName').value.trim();
+        farm.location = document.getElementById('editFarmLocation').value.trim();
+        farm.size = document.getElementById('editFarmSize').value.trim();
+        farm.crops = document.getElementById('editFarmCrops').value.trim();
+        farms[idx] = farm;
+        localStorage.setItem('farmsList', JSON.stringify(farms));
+        document.getElementById('editFarmModal').style.display = 'none';
+        loadFarms();
+      };
+
+      // Cancel handler
+      document.getElementById('cancelEditBtn').onclick = function() {
+        document.getElementById('editFarmModal').style.display = 'none';
+      };
+    }
+
+    loadFarms();
+
+    // Handle new farm
+    document.getElementById('farmForm').onsubmit = function(e) {
+      e.preventDefault();
+      const name = document.getElementById('farmName').value.trim();
+      const location = document.getElementById('farmLocation').value.trim();
+      const size = document.getElementById('farmSize').value.trim();
+      const crops = document.getElementById('farmCrops').value.trim();
+      if (!name || !location || !size || !crops) return;
+      let farms = JSON.parse(localStorage.getItem('farmsList') || '[]');
+      farms.push({ name, location, size, crops, time: new Date().toISOString() });
+      localStorage.setItem('farmsList', JSON.stringify(farms));
+      document.getElementById('farmForm').reset();
+      loadFarms();
+    };
+  </script>
+  <script>
+  const swahiliStrings = {
+    "My Farms": "Mashamba Yangu",
+    "Farm Name": "Jina la Shamba",
+    "Location": "Mahali",
+    "Size (acres)": "Ukubwa (eka)",
+    "Crops (comma separated)": "Mazao (tenganisha kwa koma)",
+    "Add Farm": "Ongeza Shamba",
+    "Edit Farm": "Hariri Shamba",
+    "Save": "Hifadhi",
+    "Cancel": "Ghairi",
+    "Crops:": "Mazao:",
+    "Added:": "Imeongezwa:"
+  };
+
+  function translateFarmsToSwahili() {
+    document.querySelector('h1').textContent = swahiliStrings["My Farms"];
+    document.getElementById('farmName').placeholder = swahiliStrings["Farm Name"];
+    document.getElementById('farmLocation').placeholder = swahiliStrings["Location"];
+    document.getElementById('farmSize').placeholder = swahiliStrings["Size (acres)"];
+    document.getElementById('farmCrops').placeholder = swahiliStrings["Crops (comma separated)"];
+    document.querySelector('.farm-form button').textContent = swahiliStrings["Add Farm"];
+    document.querySelector('#editFarmModal h2').textContent = swahiliStrings["Edit Farm"];
+    document.getElementById('editFarmName').placeholder = swahiliStrings["Farm Name"];
+    document.getElementById('editFarmLocation').placeholder = swahiliStrings["Location"];
+    document.getElementById('editFarmSize').placeholder = swahiliStrings["Size (acres)"];
+    document.getElementById('editFarmCrops').placeholder = swahiliStrings["Crops (comma separated)"];
+    document.querySelector('#editFarmForm button[type="submit"]').textContent = swahiliStrings["Save"];
+    document.getElementById('cancelEditBtn').textContent = swahiliStrings["Cancel"];
+    // Translate farm list details
+    document.querySelectorAll('.farm .details').forEach(el => {
+      el.innerHTML = el.innerHTML
+        .replace("Crops:", swahiliStrings["Crops:"])
+        .replace("Added:", swahiliStrings["Added:"]);
+    });
+  }
+
+  function setupFarmsLanguage() {
+    let lang = localStorage.getItem('language') || 'en';
+    if (lang === 'sw') translateFarmsToSwahili();
+  }
+  window.addEventListener('DOMContentLoaded', setupFarmsLanguage);
+
+  // Universal language loader for all pages
+  window.addEventListener('DOMContentLoaded', function() {
+    const lang = localStorage.getItem('agriLang') || 'en';
+    // Set language selector if present
+    const langSel = document.getElementById('languageSelect');
+    if (langSel) langSel.value = lang;
+    // Call your translation function here, e.g.:
+    // updateLanguage(lang);
+  });
+</script>
+</body>
+</html>

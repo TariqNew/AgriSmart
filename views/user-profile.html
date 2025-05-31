@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Profile</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #e0ffe0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      transition: background 0.3s, color 0.3s;
+    }
+    .profile-card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px #b2dfdb88;
+      padding: 32px 28px 24px 28px;
+      text-align: center;
+      min-width: 320px;
+      position: relative;
+    }
+    .profile-photo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #b2dfdb;
+      margin-bottom: 16px;
+      background: #f4f4f4;
+    }
+    .profile-card h2 {
+      color: #388e3c;
+      margin-bottom: 0.5em;
+    }
+    .profile-card .email {
+      color: #222;
+      font-size: 1.1em;
+      margin-bottom: 1em;
+    }
+    .profile-card .farmer-type {
+      margin-bottom: 1.5em;
+      font-size: 1em;
+      color: #388e3c;
+    }
+    .logout-btn, .home-btn {
+      background: #b2dfdb;
+      color: #222;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 24px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin: 0 8px;
+    }
+    .logout-btn:hover, .home-btn:hover {
+      background: #388e3c;
+      color: #fff;
+    }
+    .profile-upload {
+      margin-bottom: 10px;
+    }
+    .profile-card label {
+      font-size: 0.95em;
+      color: #388e3c;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .profile-card select {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #b2dfdb;
+      margin-bottom: 12px;
+      font-size: 1em;
+    }
+    .profile-card input[type="text"] {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #b2dfdb;
+      margin-bottom: 12px;
+      font-size: 1em;
+      width: 80%;
+      text-align: center;
+    }
+    /* Dark mode styles */
+    body.dark-mode {
+      background: linear-gradient(135deg, #222 0%, #444 100%) !important;
+      color: #e0ffe0 !important;
+    }
+    body.dark-mode .profile-card {
+      background: #222 !important;
+      color: #e0ffe0 !important;
+      box-shadow: 0 8px 32px #00000088;
+    }
+    body.dark-mode .profile-card h2,
+    body.dark-mode .profile-card .farmer-type,
+    body.dark-mode .profile-card label {
+      color: #76ff03 !important;
+    }
+    body.dark-mode .profile-card .email {
+      color: #e0ffe0 !important;
+    }
+    body.dark-mode .profile-card select,
+    body.dark-mode .profile-card input[type="text"] {
+      background: #3c3c3c;
+      color: #e0ffe0;
+      border: 1px solid #76ff03;
+    }
+    body.dark-mode .logout-btn, body.dark-mode .home-btn {
+      background: #333;
+      color: #e0ffe0;
+    }
+    body.dark-mode .logout-btn:hover, body.dark-mode .home-btn:hover {
+      background: #76ff03;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-card">
+    <img src="icons/profile.jpg" alt="Profile Photo" id="profilePhoto" class="profile-photo">
+    <div class="profile-upload">
+      <input type="file" id="photoInput" accept="image/*" style="display:none;">
+      <button class="home-btn" onclick="document.getElementById('photoInput').click()">Change Photo</button>
+    </div>
+    <label for="userNameInput">User Name:</label>
+    <input type="text" id="userNameInput" value="" placeholder="Enter your name">
+    <h2 id="userName"></h2>
+    <div class="email" id="userEmail"></div>
+    <label for="farmerType">Type of Farmer:</label>
+    <select id="farmerType">
+      <option value="Small Scale Farmer">Small Scale Farmer</option>
+      <option value="Large Scale Farmer">Large Scale Farmer</option>
+    </select>
+    <div class="farmer-type" id="farmerTypeDisplay"></div>
+    <button class="home-btn" id="saveBtn">Save</button>
+    <button class="logout-btn" onclick="logout()">Log Out</button>
+  </div>
+  <script>
+    // Apply dark mode on page load if set in localStorage
+    window.addEventListener('DOMContentLoaded', function() {
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+    });
+
+    // Get email from localStorage
+    const email = localStorage.getItem('userEmail');
+    if (!email) {
+      window.location.href = 'login.html';
+    } else {
+      document.getElementById('userEmail').textContent = email;
+      // Use the part before @ as username
+      let username = localStorage.getItem('userName') || email.split('@')[0];
+      document.getElementById('userName').textContent = username;
+      document.getElementById('userNameInput').value = username;
+    }
+
+    // Farmer type logic
+    const farmerTypeSelect = document.getElementById('farmerType');
+    const farmerTypeDisplay = document.getElementById('farmerTypeDisplay');
+    // Load saved type
+    const savedType = localStorage.getItem('farmerType');
+    if (savedType) {
+      farmerTypeSelect.value = savedType;
+      farmerTypeDisplay.textContent = savedType;
+    } else {
+      farmerTypeDisplay.textContent = farmerTypeSelect.value;
+    }
+    farmerTypeSelect.onchange = function() {
+      localStorage.setItem('farmerType', this.value);
+      farmerTypeDisplay.textContent = this.value;
+    };
+
+    // Profile photo logic
+    const profilePhoto = document.getElementById('profilePhoto');
+    const savedPhoto = localStorage.getItem('profilePhoto');
+    if (savedPhoto) {
+      profilePhoto.src = savedPhoto;
+    }
+    document.getElementById('photoInput').onchange = function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          profilePhoto.src = evt.target.result;
+          localStorage.setItem('profilePhoto', evt.target.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+
+    // Save profile info and redirect to home
+    document.getElementById('saveBtn').onclick = function() {
+      // Save user name
+      const newName = document.getElementById('userNameInput').value.trim();
+      if (newName) {
+        localStorage.setItem('userName', newName);
+        document.getElementById('userName').textContent = newName;
+      }
+      // Save farmer type
+      localStorage.setItem('farmerType', farmerTypeSelect.value);
+      farmerTypeDisplay.textContent = farmerTypeSelect.value;
+      // Save profile photo if changed (already handled on change)
+      alert('Profile information saved!');
+      window.location.href = 'home.html';
+    };
+
+    // Logout
+    function logout() {
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userName');
+      localStorage.removeItem('profilePhoto');
+      localStorage.removeItem('farmerType');
+      window.location.href = 'login.html';
+    }
+
+    const swahiliStrings = {
+      "User Name:": "Jina la Mtumiaji:",
+      "Type of Farmer:": "Aina ya Mkulima:",
+      "Small Scale Farmer": "Mkulima Mdogo",
+      "Large Scale Farmer": "Mkulima Mkubwa",
+      "Save": "Hifadhi",
+      "Log Out": "Toka",
+      "Profile information saved!": "Taarifa za wasifu zimehifadhiwa!",
+      "Enter your name": "Weka jina lako",
+      "Change Photo": "Badilisha Picha"
+    };
+
+    function translateProfileToSwahili() {
+      // Labels
+      document.querySelector('label[for="userNameInput"]').textContent = swahiliStrings["User Name:"];
+      document.querySelector('label[for="farmerType"]').textContent = swahiliStrings["Type of Farmer:"];
+      // Input placeholder
+      document.getElementById('userNameInput').placeholder = swahiliStrings["Enter your name"];
+      // Select options
+      const options = document.querySelectorAll('#farmerType option');
+      if (options.length >= 2) {
+        options[0].textContent = swahiliStrings["Small Scale Farmer"];
+        options[1].textContent = swahiliStrings["Large Scale Farmer"];
+      }
+      // Buttons
+      document.getElementById('saveBtn').textContent = swahiliStrings["Save"];
+      document.querySelector('.logout-btn').textContent = swahiliStrings["Log Out"];
+      document.querySelector('.home-btn').textContent = swahiliStrings["Change Photo"];
+      // Farmer type display
+      const farmerTypeDisplay = document.getElementById('farmerTypeDisplay');
+      if (farmerTypeDisplay.textContent === "Small Scale Farmer") {
+        farmerTypeDisplay.textContent = swahiliStrings["Small Scale Farmer"];
+      } else if (farmerTypeDisplay.textContent === "Large Scale Farmer") {
+        farmerTypeDisplay.textContent = swahiliStrings["Large Scale Farmer"];
+      }
+      // Save alert
+      document.getElementById('saveBtn').onclick = function() {
+        const newName = document.getElementById('userNameInput').value.trim();
+        if (newName) {
+          localStorage.setItem('userName', newName);
+          document.getElementById('userName').textContent = newName;
+        }
+        localStorage.setItem('farmerType', document.getElementById('farmerType').value);
+        farmerTypeDisplay.textContent = document.getElementById('farmerType').value === "Small Scale Farmer"
+          ? swahiliStrings["Small Scale Farmer"]
+          : swahiliStrings["Large Scale Farmer"];
+        alert(swahiliStrings["Profile information saved!"]);
+        window.location.href = 'home.html';
+      };
+    }
+
+    function translateProfileToEnglish() {
+      document.querySelector('label[for="userNameInput"]').textContent = "User Name:";
+      document.querySelector('label[for="farmerType"]').textContent = "Type of Farmer:";
+      document.getElementById('userNameInput').placeholder = "Enter your name";
+      const options = document.querySelectorAll('#farmerType option');
+      if (options.length >= 2) {
+        options[0].textContent = "Small Scale Farmer";
+        options[1].textContent = "Large Scale Farmer";
+      }
+      document.getElementById('saveBtn').textContent = "Save";
+      document.querySelector('.logout-btn').textContent = "Log Out";
+      document.querySelector('.home-btn').textContent = "Change Photo";
+      const farmerTypeDisplay = document.getElementById('farmerTypeDisplay');
+      if (farmerTypeDisplay.textContent === swahiliStrings["Small Scale Farmer"]) {
+        farmerTypeDisplay.textContent = "Small Scale Farmer";
+      } else if (farmerTypeDisplay.textContent === swahiliStrings["Large Scale Farmer"]) {
+        farmerTypeDisplay.textContent = "Large Scale Farmer";
+      }
+      document.getElementById('saveBtn').onclick = function() {
+        const newName = document.getElementById('userNameInput').value.trim();
+        if (newName) {
+          localStorage.setItem('userName', newName);
+          document.getElementById('userName').textContent = newName;
+        }
+        localStorage.setItem('farmerType', document.getElementById('farmerType').value);
+        farmerTypeDisplay.textContent = document.getElementById('farmerType').value;
+        alert("Profile information saved!");
+        window.location.href = 'home.html';
+      };
+    }
+
+    function applyProfileLanguage() {
+      let lang = localStorage.getItem('language') || 'en';
+      if (lang === 'sw') {
+        translateProfileToSwahili();
+      } else {
+        translateProfileToEnglish();
+      }
+    }
+
+    // Listen for language changes from other tabs/pages
+    window.addEventListener('storage', function(e) {
+      if (e.key === 'language') {
+        applyProfileLanguage();
+      }
+    });
+
+    // Also respond to language changes on this page
+    window.addEventListener('DOMContentLoaded', applyProfileLanguage);
+
+    // Universal language loader for all pages
+    window.addEventListener('DOMContentLoaded', function() {
+      const lang = localStorage.getItem('agriLang') || 'en';
+      // Set language selector if present
+      const langSel = document.getElementById('languageSelect');
+      if (langSel) langSel.value = lang;
+      // Call your translation function here, e.g.:
+      // updateLanguage(lang);
+    });
+  </script>
+</body>
+</html>

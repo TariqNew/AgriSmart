@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Settings - Agri.Ai</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #e0ffe0;
+      margin: 0;
+      padding: 0;
+      transition: background 0.3s, color 0.3s;
+    }
+    .settings-container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px #b2dfdb88;
+      padding: 32px 28px 24px 28px;
+    }
+    h1 {
+      color: #388e3c;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+    h2 {
+      color: #388e3c;
+      margin-top: 28px;
+      margin-bottom: 10px;
+      font-size: 1.2em;
+    }
+    label {
+      display: block;
+      margin: 10px 0 4px 0;
+      font-weight: 500;
+    }
+    select, input[type="checkbox"], input[type="radio"], input[type="text"], input[type="password"], input[type="email"] {
+      margin-bottom: 10px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #b2dfdb;
+      font-size: 1em;
+      width: 100%;
+      max-width: 320px;
+    }
+    .section {
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #b2dfdb55;
+    }
+    .section:last-child {
+      border-bottom: none;
+    }
+    .inline {
+      display: inline-block;
+      margin-right: 18px;
+    }
+    .actions {
+      text-align: right;
+      margin-top: 18px;
+    }
+    .save-btn {
+      background: #388e3c;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 24px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .save-btn:hover {
+      background: #2e7030;
+    }
+    /* High contrast mode */
+    body.high-contrast, .high-contrast .settings-container {
+      background: #000 !important;
+      color: #fff !important;
+    }
+    body.high-contrast input, body.high-contrast select, body.high-contrast button, .high-contrast input, .high-contrast select, .high-contrast button {
+      background: #222 !important;
+      color: #fff !important;
+      border-color: #fff !important;
+    }
+    /* Large font size */
+    body.large-font, .large-font .settings-container {
+      font-size: 1.3em !important;
+    }
+    /* Normal font size */
+    body.normal-font, .normal-font .settings-container {
+      font-size: 1em !important;
+    }
+    /* Dark mode */
+    body.dark-mode {
+      background: #121212;
+      color: #e0e0e0;
+    }
+    body.dark-mode .settings-container {
+      background: #1e1e1e;
+      box-shadow: 0 8px 32px #00000088;
+    }
+    body.dark-mode h1, body.dark-mode h2 {
+      color: #bb86fc;
+    }
+    body.dark-mode label {
+      color: #e0e0e0;
+    }
+    body.dark-mode select, body.dark-mode input[type="text"], body.dark-mode input[type="password"], body.dark-mode input[type="email"] {
+      background: #333;
+      color: #fff;
+      border: 1px solid #444;
+    }
+    body.dark-mode .save-btn {
+      background: #03dac6;
+      color: #000;
+    }
+    body.dark-mode .save-btn:hover {
+      background: #02b89b;
+    }
+  </style>
+</head>
+<body>
+  <div class="settings-container" id="settingsContainer">
+    <h1>General App Settings</h1>
+    <form id="settingsForm" autocomplete="off">
+      <div class="section">
+        <h2>Language Preference</h2>
+        <label for="language">Primary Language:</label>
+        <select id="language">
+          <option value="en">English</option>
+          <option value="sw">Swahili</option>
+        </select>
+      </div>
+
+      <div class="section">
+        <h2>Units of Measurement</h2>
+        <label for="area">Area:</label>
+        <select id="area">
+          <option value="acres">Acres</option>
+          <option value="hectares">Hectares</option>
+          <option value="sqm">Square Meters</option>
+        </select>
+        <label for="weight">Weight:</label>
+        <select id="weight">
+          <option value="kg">Kilograms</option>
+          <option value="tons">Metric Tons</option>
+        </select>
+        <label for="volume">Volume:</label>
+        <select id="volume">
+          <option value="liters">Liters</option>
+        </select>
+        <label for="temperature">Temperature:</label>
+        <select id="temperature">
+          <option value="celsius">Celsius</option>
+        </select>
+      </div>
+
+      <div class="section">
+        <h2>Notifications & Alerts</h2>
+        <label><input type="checkbox" id="notifMaster" checked> Enable All Notifications</label>
+        <div style="margin-left:18px;">
+          <label><input type="checkbox" class="notifType" value="weather" checked> Weather Alerts</label>
+          <label><input type="checkbox" class="notifType" value="pest" checked> Pest/Disease Outbreak Alerts</label>
+          <label><input type="checkbox" class="notifType" value="market" checked> Market Price Fluctuations</label>
+          <label><input type="checkbox" class="notifType" value="reminders" checked> Recommended Action Reminders</label>
+          <label><input type="checkbox" class="notifType" value="news" checked> App Updates & News</label>
+        </div>
+        <label for="notifDelivery">Notification Delivery Method:</label>
+        <select id="notifDelivery">
+          <option value="in-app">In-app</option>
+          <option value="sms">SMS</option>
+          <option value="email">Email</option>
+        </select>
+        <label for="notifFreq">Notification Frequency:</label>
+        <select id="notifFreq">
+          <option value="immediate">Immediate</option>
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+        </select>
+      </div>
+
+      <div class="section">
+        <h2>Data Usage & Sync</h2>
+        <label><input type="checkbox" id="offlineMode"> Offline Mode</label>
+        <label for="syncFreq">Data Sync Frequency:</label>
+        <select id="syncFreq">
+          <option value="immediate">Immediate</option>
+          <option value="hourly">Hourly</option>
+          <option value="daily">Daily</option>
+        </select>
+        <label><input type="checkbox" id="dataSaver"> Data Saver Mode</label>
+        <label><input type="checkbox" id="cellularData"> Allow Cellular Data Usage</label>
+      </div>
+
+      <div class="section">
+        <h2>Privacy & Security</h2>
+        <label><input type="checkbox" id="shareData"> Allow Data Sharing with Partners</label>
+        <label><input type="checkbox" id="locationServices"> Enable Location Services</label>
+        <label><input type="checkbox" id="biometric"> Biometric Authentication</label>
+        <label for="password">Change Password:</label>
+        <input type="password" id="password" placeholder="New Password">
+        <label for="pin">Set up PIN:</label>
+        <input type="text" id="pin" maxlength="6" placeholder="Enter PIN">
+      </div>
+
+      <div class="section">
+        <h2>Accessibility</h2>
+        <label for="fontSize">Font Size:</label>
+        <select id="fontSize">
+          <option value="normal">Normal</option>
+          <option value="large">Large</option>
+        </select>
+        <label><input type="checkbox" id="highContrast"> High Contrast Mode</label>
+        <label><input type="checkbox" id="voiceIO"> Voice Input/Output</label>
+        <label><input type="checkbox" id="screenReader"> Screen Reader Compatibility</label>
+      </div>
+
+      <div class="section">
+        <h2>Help & Support</h2>
+        <button type="button" onclick="alert('FAQ coming soon!')">FAQ</button>
+        <button type="button" onclick="alert('Contact support at support@agriai.com')">Contact Support</button>
+        <button type="button" onclick="alert('Feedback form coming soon!')">Send Feedback</button>
+      </div>
+
+      <div class="section">
+        <h2>About App</h2>
+        <div>Version: 1.0.0</div>
+        <a href="#" onclick="alert('Terms of Service coming soon!');return false;">Terms of Service</a> |
+        <a href="#" onclick="alert('Privacy Policy coming soon!');return false;">Privacy Policy</a>
+      </div>
+
+      <div class="section">
+        <h2>My Farm Profile Settings</h2>
+        <label for="farmAcreage">Acreage:</label>
+        <input type="text" id="farmAcreage" placeholder="e.g. 10">
+        <label for="farmLocation">Location:</label>
+        <input type="text" id="farmLocation" placeholder="e.g. Dodoma, Tanzania">
+        <label for="primaryCrops">Primary Crops Grown:</label>
+        <input type="text" id="primaryCrops" placeholder="e.g. Maize, Beans">
+        <label for="soilTypes">Soil Types:</label>
+        <input type="text" id="soilTypes" placeholder="e.g. Sandy, Clay">
+        <label for="irrigation">Irrigation Methods:</label>
+        <input type="text" id="irrigation" placeholder="e.g. Drip, Rain-fed">
+        <label for="fields">Fields/Plots:</label>
+        <input type="text" id="fields" placeholder="e.g. North Field, South Plot">
+        <label for="cropRotation">Crop Rotation History:</label>
+        <input type="text" id="cropRotation" placeholder="e.g. 2023: Maize, 2024: Beans">
+        <label for="soilTest">Soil Test History:</label>
+        <input type="text" id="soilTest" placeholder="Upload or describe results">
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="save-btn">Save Settings</button>
+      </div>
+    </form>
+  </div>
+  <script>
+    // Restore settings from localStorage
+    window.onload = function() {
+      // Font size
+      const fontSize = localStorage.getItem('fontSize');
+      if (fontSize === 'large') {
+        document.body.classList.add('large-font');
+        document.getElementById('fontSize').value = 'large';
+      } else {
+        document.body.classList.remove('large-font');
+        document.getElementById('fontSize').value = 'normal';
+      }
+      // High contrast
+      if (localStorage.getItem('highContrast') === 'true') {
+        document.body.classList.add('high-contrast');
+        document.getElementById('highContrast').checked = true;
+      }
+      // Language
+      const lang = localStorage.getItem('language');
+      if (lang) document.getElementById('language').value = lang;
+      // Units
+      ['area','weight','volume','temperature'].forEach(id=>{
+        const val = localStorage.getItem(id);
+        if(val) document.getElementById(id).value = val;
+      });
+      // Notifications
+      document.getElementById('notifMaster').checked = localStorage.getItem('notifMaster') !== 'false';
+      document.querySelectorAll('.notifType').forEach(box=>{
+        box.checked = localStorage.getItem('notifType_'+box.value) !== 'false';
+      });
+      const notifDelivery = localStorage.getItem('notifDelivery');
+      if(notifDelivery) document.getElementById('notifDelivery').value = notifDelivery;
+      const notifFreq = localStorage.getItem('notifFreq');
+      if(notifFreq) document.getElementById('notifFreq').value = notifFreq;
+      // Data usage
+      document.getElementById('offlineMode').checked = localStorage.getItem('offlineMode') === 'true';
+      document.getElementById('dataSaver').checked = localStorage.getItem('dataSaver') === 'true';
+      document.getElementById('cellularData').checked = localStorage.getItem('cellularData') === 'true';
+      const syncFreq = localStorage.getItem('syncFreq');
+      if(syncFreq) document.getElementById('syncFreq').value = syncFreq;
+      // Privacy
+      document.getElementById('shareData').checked = localStorage.getItem('shareData') === 'true';
+      document.getElementById('locationServices').checked = localStorage.getItem('locationServices') === 'true';
+      document.getElementById('biometric').checked = localStorage.getItem('biometric') === 'true';
+      document.getElementById('password').value = localStorage.getItem('password') || '';
+      document.getElementById('pin').value = localStorage.getItem('pin') || '';
+      // Accessibility
+      document.getElementById('voiceIO').checked = localStorage.getItem('voiceIO') === 'true';
+      document.getElementById('screenReader').checked = localStorage.getItem('screenReader') === 'true';
+      // Farm profile
+      ['farmAcreage','farmLocation','primaryCrops','soilTypes','irrigation','fields','cropRotation','soilTest'].forEach(id=>{
+        document.getElementById(id).value = localStorage.getItem(id) || '';
+      });
+    };
+
+    // Font size interactivity
+    document.getElementById('fontSize').onchange = function() {
+      if (this.value === 'large') {
+        document.body.classList.add('large-font');
+        document.body.classList.remove('normal-font');
+      } else {
+        document.body.classList.remove('large-font');
+        document.body.classList.add('normal-font');
+      }
+      localStorage.setItem('fontSize', this.value);
+    };
+
+    // High contrast interactivity
+    document.getElementById('highContrast').onchange = function() {
+      if (this.checked) {
+        document.body.classList.add('high-contrast');
+      } else {
+        document.body.classList.remove('high-contrast');
+      }
+      localStorage.setItem('highContrast', this.checked);
+    };
+
+    // Language preference
+    document.getElementById('language').onchange = function() {
+      localStorage.setItem('language', this.value);
+    };
+
+    // Units of measurement
+    ['area','weight','volume','temperature'].forEach(id=>{
+      document.getElementById(id).onchange = function() {
+        localStorage.setItem(id, this.value);
+      };
+    });
+
+    // Notifications
+    document.getElementById('notifMaster').onchange = function() {
+      localStorage.setItem('notifMaster', this.checked);
+      document.querySelectorAll('.notifType').forEach(box=>{
+        box.disabled = !this.checked;
+      });
+    };
+    document.querySelectorAll('.notifType').forEach(box=>{
+      box.onchange = function() {
+        localStorage.setItem('notifType_'+this.value, this.checked);
+      };
+    });
+    document.getElementById('notifDelivery').onchange = function() {
+      localStorage.setItem('notifDelivery', this.value);
+    };
+    document.getElementById('notifFreq').onchange = function() {
+      localStorage.setItem('notifFreq', this.value);
+    };
+
+    // Data usage
+    document.getElementById('offlineMode').onchange = function() {
+      localStorage.setItem('offlineMode', this.checked);
+    };
+    document.getElementById('dataSaver').onchange = function() {
+      localStorage.setItem('dataSaver', this.checked);
+    };
+    document.getElementById('cellularData').onchange = function() {
+      localStorage.setItem('cellularData', this.checked);
+    };
+    document.getElementById('syncFreq').onchange = function() {
+      localStorage.setItem('syncFreq', this.value);
+    };
+
+    // Privacy & Security
+    document.getElementById('shareData').onchange = function() {
+      localStorage.setItem('shareData', this.checked);
+    };
+    document.getElementById('locationServices').onchange = function() {
+      localStorage.setItem('locationServices', this.checked);
+    };
+    document.getElementById('biometric').onchange = function() {
+      localStorage.setItem('biometric', this.checked);
+    };
+    document.getElementById('password').oninput = function() {
+      localStorage.setItem('password', this.value);
+    };
+    document.getElementById('pin').oninput = function() {
+      localStorage.setItem('pin', this.value);
+    };
+
+    // Accessibility
+    document.getElementById('voiceIO').onchange = function() {
+      localStorage.setItem('voiceIO', this.checked);
+    };
+    document.getElementById('screenReader').onchange = function() {
+      localStorage.setItem('screenReader', this.checked);
+    };
+
+    // Farm profile
+    ['farmAcreage','farmLocation','primaryCrops','soilTypes','irrigation','fields','cropRotation','soilTest'].forEach(id=>{
+      document.getElementById(id).oninput = function() {
+        localStorage.setItem(id, this.value);
+      };
+    });
+
+    // Save all settings on submit
+    document.getElementById('settingsForm').onsubmit = function(e) {
+      e.preventDefault();
+      alert('Settings saved!');
+      window.location.href = 'home.html';
+    };
+
+    // On load, set checkbox state
+    window.addEventListener('DOMContentLoaded', function() {
+      const darkMode = localStorage.getItem('darkMode') === 'true';
+      document.body.classList.toggle('dark-mode', darkMode);
+      if (document.getElementById('darkModeToggle')) {
+        document.getElementById('darkModeToggle').checked = darkMode;
+      }
+    });
+
+    // If using a checkbox for dark mode in settings
+    if (document.getElementById('darkModeToggle')) {
+      document.getElementById('darkModeToggle').onchange = function() {
+        document.body.classList.toggle('dark-mode', this.checked);
+        localStorage.setItem('darkMode', this.checked);
+      };
+    }
+
+    // Kiswahili translations for settings page
+    const swahiliStrings = {
+      "General App Settings": "Mipangilio ya Programu",
+      "Language Preference": "Chaguo la Lugha",
+      "Primary Language:": "Lugha Kuu:",
+      "English": "Kiingereza",
+      "Swahili": "Kiswahili",
+      "Units of Measurement": "Vipimo",
+      "Area:": "Eneo:",
+      "Acres": "Eka",
+      "Hectares": "Hekta",
+      "Square Meters": "Mita za mraba",
+      "Weight:": "Uzito:",
+      "Kilograms": "Kilogramu",
+      "Metric Tons": "Tani",
+      "Volume:": "Kiasi:",
+      "Liters": "Lita",
+      "Temperature:": "Joto:",
+      "Celsius": "Selsiasi",
+      "Notifications & Alerts": "Arifa na Taarifa",
+      "Enable All Notifications": "Washa Arifa Zote",
+      "Weather Alerts": "Arifa za Hali ya Hewa",
+      "Pest/Disease Outbreak Alerts": "Arifa za Wadudu/Magonjwa",
+      "Market Price Fluctuations": "Mabadiliko ya Bei Sokoni",
+      "Recommended Action Reminders": "Kumbusho la Hatua Zinazopendekezwa",
+      "App Updates & News": "Habari na Sasisho la Programu",
+      "Notification Delivery Method:": "Njia ya Kupokea Arifa:",
+      "In-app": "Ndani ya Programu",
+      "SMS": "SMS",
+      "Email": "Barua Pepe",
+      "Notification Frequency:": "Mara ya Arifa:",
+      "Immediate": "Mara Moja",
+      "Daily": "Kila Siku",
+      "Weekly": "Kila Wiki",
+      "Data Usage & Sync": "Matumizi ya Data & Usawazishaji",
+      "Offline Mode": "Hali ya Nje ya Mtandao",
+      "Data Sync Frequency:": "Mara ya Usawazishaji Data:",
+      "Hourly": "Kila Saa",
+      "Data Saver Mode": "Hali ya Kuokoa Data",
+      "Allow Cellular Data Usage": "Ruhusu Matumizi ya Data ya Simu",
+      "Privacy & Security": "Faragha na Usalama",
+      "Allow Data Sharing with Partners": "Ruhusu Kushiriki Data na Washirika",
+      "Enable Location Services": "Washa Huduma za Mahali",
+      "Biometric Authentication": "Uthibitisho wa Biometriki",
+      "Change Password:": "Badilisha Nenosiri:",
+      "Set up PIN:": "Weka PIN:",
+      "Accessibility": "Ufikivu",
+      "Font Size:": "Ukubwa wa Herufi:",
+      "Normal": "Kawaida",
+      "Large": "Kubwa",
+      "High Contrast Mode": "Hali ya Ulinganifu Mkubwa",
+      "Voice Input/Output": "Sauti Ingizo/Tokeo",
+      "Screen Reader Compatibility": "Ulinganifu na Kisoma Skrini",
+      "Help & Support": "Msaada na Usaidizi",
+      "FAQ": "Maswali Yanayoulizwa Mara kwa Mara",
+      "Contact Support": "Wasiliana na Usaidizi",
+      "Send Feedback": "Tuma Maoni",
+      "About App": "Kuhusu Programu",
+      "Version: 1.0.0": "Toleo: 1.0.0",
+      "Terms of Service": "Masharti ya Huduma",
+      "Privacy Policy": "Sera ya Faragha",
+      "My Farm Profile Settings": "Mipangilio ya Profaili ya Shamba Langu",
+      "Acreage:": "Eneo (Eka):",
+      "Location:": "Mahali:",
+      "Primary Crops Grown:": "Mazao Makuu Yanayolimwa:",
+      "Soil Types:": "Aina za Udongo:",
+      "Irrigation Methods:": "Njia za Umwagiliaji:",
+      "Fields/Plots:": "Mashamba/Sehemu:",
+      "Crop Rotation History:": "Historia ya Mzunguko wa Mazao:",
+      "Soil Test History:": "Historia ya Vipimo vya Udongo:",
+      "Save Settings": "Hifadhi Mipangilio",
+      "By continuing, you agree to our Terms of Service and": "Kwa kuendelea, unakubali Masharti ya Huduma na",
+      "Privacy Policy": "Sera ya Faragha"
+    };
+
+    // Function to translate the page to Kiswahili
+    function translateToSwahili() {
+      // Translate static text
+      document.querySelectorAll('h1, h2, label, button, select option, .save-btn, .section div, a').forEach(el => {
+        const txt = el.textContent.trim();
+        if (swahiliStrings[txt]) {
+          el.textContent = swahiliStrings[txt];
+        }
+      });
+      // Translate placeholders
+      const placeholders = {
+        "New Password": "Nenosiri Jipya",
+        "Enter PIN": "Weka PIN",
+        "e.g. 10": "mf. 10",
+        "e.g. Dodoma, Tanzania": "mf. Dodoma, Tanzania",
+        "e.g. Maize, Beans": "mf. Mahindi, Maharage",
+        "e.g. Sandy, Clay": "mf. Kichanga, Udongo wa Mfinyanzi",
+        "e.g. Drip, Rain-fed": "mf. Matone, Mvua",
+        "e.g. North Field, South Plot": "mf. Shamba la Kaskazini, Sehemu ya Kusini",
+        "e.g. 2023: Maize, 2024: Beans": "mf. 2023: Mahindi, 2024: Maharage",
+        "Upload or describe results": "Pakia au eleza matokeo"
+      };
+      document.querySelectorAll('input, textarea').forEach(el => {
+        if (el.placeholder && placeholders[el.placeholder]) {
+          el.placeholder = placeholders[el.placeholder];
+        }
+      });
+
+      // Adjust interactive feedbacks and alerts to Kiswahili
+      // Save button
+      const saveBtn = document.querySelector('.save-btn');
+      if (saveBtn) {
+        saveBtn.onclick = function(e) {
+          e.preventDefault();
+          alert('Mipangilio imehifadhiwa!');
+          window.location.href = 'home.html';
+        };
+      }
+      // FAQ, Contact, Feedback buttons
+      const faqBtn = Array.from(document.querySelectorAll('button')).find(b => b.textContent.trim() === 'Maswali Yanayoulizwa Mara kwa Mara');
+      if (faqBtn) faqBtn.onclick = function() { alert('Maswali yanayoulizwa mara kwa mara yanakuja hivi karibuni!'); };
+      const contactBtn = Array.from(document.querySelectorAll('button')).find(b => b.textContent.trim() === 'Wasiliana na Usaidizi');
+      if (contactBtn) contactBtn.onclick = function() { alert('Wasiliana na usaidi kupitia support@agriai.com'); };
+      const feedbackBtn = Array.from(document.querySelectorAll('button')).find(b => b.textContent.trim() === 'Tuma Maoni');
+      if (feedbackBtn) feedbackBtn.onclick = function() { alert('Fomu ya maoni inakuja hivi karibuni!'); };
+      // Terms and Privacy links
+      const links = document.querySelectorAll('a');
+      links.forEach(link => {
+        if (link.textContent.trim() === 'Masharti ya Huduma') {
+          link.onclick = function(e) { e.preventDefault(); alert('Masharti ya Huduma yanakuja hivi karibuni!'); };
+        }
+        if (link.textContent.trim() === 'Sera ya Faragha') {
+          link.onclick = function(e) { e.preventDefault(); alert('Sera ya Faragha inakuja hivi karibuni!'); };
+        }
+      });
+
+      // Add toggle buttons for Notifications, Privacy & Security sections in Kiswahili
+      // Notifications & Alerts
+      let notifSection = Array.from(document.querySelectorAll('.section h2')).find(h2 => h2.textContent.trim() === 'Arifa na Taarifa');
+      if (notifSection && !document.getElementById('toggleNotifSw')) {
+        const notifToggle = document.createElement('button');
+        notifToggle.id = 'toggleNotifSw';
+        notifToggle.type = 'button';
+        notifToggle.textContent = 'Onyesha/Ficha Arifa';
+        notifToggle.style = 'margin-left:18px; background:#b2dfdb; color:#388e3c; border:none; border-radius:8px; padding:6px 14px; cursor:pointer;';
+        notifSection.parentNode.insertBefore(notifToggle, notifSection.nextSibling);
+
+        notifToggle.onclick = function() {
+          const notifContent = notifSection.parentNode.querySelectorAll('label, select');
+          notifContent.forEach(el => {
+            if (el.style.display === 'none') {
+              el.style.display = '';
+            } else {
+              el.style.display = 'none';
+            }
+          });
+        };
+      }
+
+      // Privacy & Security
+      let privacySection = Array.from(document.querySelectorAll('.section h2')).find(h2 => h2.textContent.trim() === 'Faragha na Usalama');
+      if (privacySection && !document.getElementById('togglePrivacySw')) {
+        const privacyToggle = document.createElement('button');
+        privacyToggle.id = 'togglePrivacySw';
+        privacyToggle.type = 'button';
+        privacyToggle.textContent = 'Onyesha/Ficha Faragha';
+        privacyToggle.style = 'margin-left:18px; background:#b2dfdb; color:#388e3c; border:none; border-radius:8px; padding:6px 14px; cursor:pointer;';
+        privacySection.parentNode.insertBefore(privacyToggle, privacySection.nextSibling);
+
+        privacyToggle.onclick = function() {
+          const privacyContent = privacySection.parentNode.querySelectorAll('label, input, select');
+          privacyContent.forEach(el => {
+            if (el.tagName !== 'H2') {
+              if (el.style.display === 'none') {
+                el.style.display = '';
+              } else {
+                el.style.display = 'none';
+              }
+            }
+          });
+        };
+      }
+    }
+
+    // Listen for language change
+    document.getElementById('language').onchange = function() {
+      localStorage.setItem('language', this.value);
+      if (this.value === 'sw') {
+        translateToSwahili();
+      } else {
+        window.location.reload(); // Reload to restore English
+      }
+    };
+
+    // On page load, auto-translate if Kiswahili is set
+    window.addEventListener('DOMContentLoaded', function() {
+      if (localStorage.getItem('language') === 'sw') {
+        translateToSwahili();
+        document.getElementById('language').value = 'sw';
+      }
+    });
+
+    // Universal language loader for all pages
+    window.addEventListener('DOMContentLoaded', function() {
+      const lang = localStorage.getItem('agriLang') || 'en';
+      // Set language selector if present
+      const langSel = document.getElementById('languageSelect');
+      if (langSel) langSel.value = lang;
+      // Call your translation function here, e.g.:
+      // updateLanguage(lang);
+    });
+  </script>
+</body>
+</html>

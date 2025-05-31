@@ -1,0 +1,95 @@
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f2f5f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .card {
+      background: #fff;
+      width: 600px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .card img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .content {
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 1.5em;
+      margin: 0;
+      text-align: center;
+      padding: 16px 0;
+    }
+
+    .content h2 {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+    }
+
+    .content p {
+      font-size: 0.95em;
+      color: #333;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .recommendation {
+      margin-bottom: 20px;
+    }
+
+    .recommendation h3 {
+      font-size: 1em;
+      margin-bottom: 6px;
+    }
+
+    .recommendation p {
+      font-size: 0.9em;
+      margin: 0;
+      color: #555;
+    }
+
+    .btn {
+      display: block;
+      width: calc(100% - 40px);
+      margin: 0 auto 20px auto;
+      padding: 12px;
+      background: #4CAF50;
+      color: black;
+      text-align: center;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #45a049;
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.3em;
+      }
+
+      .content {
+        padding: 16px;
+      }
+
+      .btn {
+        padding: 10px;
+      }
+    }

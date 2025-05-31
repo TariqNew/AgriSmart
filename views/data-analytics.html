@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Data Analytics & Report</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #e0ffe0; margin: 0; padding: 0; }
+    .container { max-width: 900px; margin: 40px auto; background: #fff; border-radius: 18px; box-shadow: 0 8px 32px #b2dfdb88; padding: 32px 28px 24px 28px; }
+    h1 { color: #388e3c; text-align: center; }
+    .section { margin-bottom: 32px; }
+    .question-list { background: #f4fef4; border-radius: 8px; padding: 12px; max-height: 300px; overflow-y: auto; }
+    .question-list li { margin-bottom: 8px; }
+    .keywords { margin-top: 10px; }
+    .keyword { display: inline-block; background: #b2dfdb; color: #222; border-radius: 6px; padding: 4px 10px; margin: 2px 4px; font-size: 0.98em; }
+    .tab-btns { margin-bottom: 18px; text-align: center; }
+    .tab-btns button { margin: 0 6px; padding: 7px 18px; border-radius: 6px; border: 1px solid #388e3c; background: #fff; color: #388e3c; cursor: pointer; font-size: 1em; }
+    .tab-btns button.active, .tab-btns button:hover { background: #388e3c; color: #fff; }
+    .qa-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    .qa-table th, .qa-table td { border: 1px solid #b2dfdb; padding: 8px; text-align: left; }
+    .qa-table th { background: #b2dfdb; }
+    .qa-table td { background: #f4fef4; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Data Analytics & Report</h1>
+    <div class="section">
+      <h2>Questions & Answers</h2>
+      <table class="qa-table" id="qaTable">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Question</th>
+            <th>AI Answer</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="section">
+      <h2>User Interactions with AI Assistant</h2>
+      <div class="tab-btns">
+        <button id="dailyBtn" class="active">Daily</button>
+        <button id="monthlyBtn">Monthly</button>
+        <button id="yearlyBtn">Yearly</button>
+      </div>
+      <canvas id="interactChart" height="80"></canvas>
+    </div>
+    <div class="section">
+      <h2>Most Common Keywords</h2>
+      <div class="keywords" id="keywordList"></div>
+    </div>
+  </div>
+  <script>
+    // --- Load analytics data from backend ---
+    async function loadAnalytics() {
+      let analytics = [];
+      try {
+        const res = await fetch('/api/analytics');
+        analytics = await res.json();
+      } catch (e) {
+        document.getElementById('qaTable').innerHTML = '<tr><td colspan="3">Failed to load analytics.</td></tr>';
+        return;
+      }
+      // If you want to store answers, update your chat logic to also store the answer!
+      // For demo, we'll use a placeholder answer if not present.
+      // Example: {question: "...", answer: "...", time: "..."}
+      analytics.forEach(item => {
+        if (!item.answer) item.answer = "Thank you for your question! (This is a demo response.)";
+      });
+
+      // --- Questions & Answers Table ---
+      const qaTableBody = document.querySelector('#qaTable tbody');
+      analytics.slice(-20).reverse().forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${new Date(item.time).toLocaleString()}</td>
+                        <td>${item.question}</td>
+                        <td>${item.answer}</td>`;
+        qaTableBody.appendChild(tr);
+      });
+
+      // --- Keyword Frequency Analysis ---
+      let wordCounts = {};
+      analytics.forEach(item => {
+        item.question.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/).forEach(word => {
+          if (word.length > 2 && !['the','and','for','you','with','can','are','how','your','what','why','when','where','who','which','that','this','from','have','has','was','but','all','any','not','out','get','got','use','using','will','should','could','would','may','might','about','into','more','some','other','than','then','too','also','just','now','only','see','ask','help','need','want','like','know','time','make','made','let','lets','did','does','doing','done','being','been','because','if','on','in','at','to','of','by','as','is','it','an','or','be','a','i','we','me','my','our','us','so','do','up','down','off','over','under','again','back','after','before','first','last','next','new','old','same','different','very','much','many','most','least','every','each','per','with','without','between','among','through','during','while','until','since','across','against','toward','upon','within','outside','inside','near','far','away','close','around','along','beside','behind','ahead','above','below','past','beyond','towards'].includes(word)) {
+            wordCounts[word] = (wordCounts[word] || 0) + 1;
+          }
+        });
+      });
+      // Sort and show top 10 keywords
+      const sorted = Object.entries(wordCounts).sort((a,b)=>b[1]-a[1]).slice(0,10);
+      const keywordList = document.getElementById('keywordList');
+      if(sorted.length === 0) {
+        keywordList.textContent = "No data yet.";
+      } else {
+        sorted.forEach(([word, count]) => {
+          const span = document.createElement('span');
+          span.className = 'keyword';
+          span.textContent = `${word} (${count})`;
+          keywordList.appendChild(span);
+        });
+      }
+
+      // --- Chart.js: User Interactions ---
+      function groupByPeriod(period) {
+        const counts = {};
+        analytics.forEach(item => {
+          const date = new Date(item.time);
+          let key;
+          if (period === 'daily') {
+            key = date.toLocaleDateString();
+          } else if (period === 'monthly') {
+            key = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}`;
+          } else if (period === 'yearly') {
+            key = `${date.getFullYear()}`;
+          }
+          counts[key] = (counts[key] || 0) + 1;
+        });
+        // Sort keys chronologically
+        return Object.entries(counts).sort((a,b) => new Date(a[0]) - new Date(b[0]));
+      }
+
+      let chart;
+      function renderChart(period) {
+        const data = groupByPeriod(period);
+        const labels = data.map(([k]) => k);
+        const values = data.map(([,v]) => v);
+        if (chart) chart.destroy();
+        chart = new Chart(document.getElementById('interactChart').getContext('2d'), {
+          type: 'bar',
+          data: {
+            labels,
+            datasets: [{
+              label: 'Questions Asked',
+              data: values,
+              backgroundColor: '#388e3c'
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { display: false }
+            },
+            scales: {
+              x: { title: { display: true, text: period.charAt(0).toUpperCase() + period.slice(1) } },
+              y: { beginAtZero: true, title: { display: true, text: 'Questions' } }
+            }
+          }
+        });
+      }
+
+      // Tab buttons
+      document.getElementById('dailyBtn').onclick = function() {
+        setActiveTab(this);
+        renderChart('daily');
+      };
+      document.getElementById('monthlyBtn').onclick = function() {
+        setActiveTab(this);
+        renderChart('monthly');
+      };
+      document.getElementById('yearlyBtn').onclick = function() {
+        setActiveTab(this);
+        renderChart('yearly');
+      };
+      function setActiveTab(btn) {
+        document.querySelectorAll('.tab-btns button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+
+      // Initial chart
+      renderChart('daily');
+    }
+
+    loadAnalytics();
+
+    // --- Language Translation ---
+    const swahiliStrings = {
+      "Data Analytics & Report": "Takwimu na Ripoti",
+      "Questions & Answers": "Maswali na Majibu",
+      "Time": "Muda",
+      "Question": "Swali",
+      "AI Answer": "Jibu la AI",
+      "User Interactions with AI Assistant": "Mawasiliano ya Mtumiaji na Msaidizi wa AI",
+      "Daily": "Kila Siku",
+      "Monthly": "Kila Mwezi",
+      "Yearly": "Kila Mwaka",
+      "Most Common Keywords": "Maneno Yanayotumika Sana",
+      "No data yet.": "Hakuna data bado."
+    };
+    function translateAnalyticsToSwahili() {
+      document.querySelector('h1').textContent = swahiliStrings["Data Analytics & Report"];
+      document.querySelector('h2').textContent = swahiliStrings["Questions & Answers"];
+      document.querySelectorAll('.qa-table th').forEach((th, i) => {
+        if (i === 0) th.textContent = swahiliStrings["Time"];
+        else if (i === 1) th.textContent = swahiliStrings["Question"];
+        else if (i === 2) th.textContent = swahiliStrings["AI Answer"];
+      });
+      document.querySelectorAll('.tab-btns button').forEach(btn => {
+        if (btn.id === 'dailyBtn') btn.textContent = swahiliStrings["Daily"];
+        else if (btn.id === 'monthlyBtn') btn.textContent = swahiliStrings["Monthly"];
+        else if (btn.id === 'yearlyBtn') btn.textContent = swahiliStrings["Yearly"];
+      });
+      document.querySelector('.section:nth-of-type(3) h2').textContent = swahiliStrings["Most Common Keywords"];
+    }
+    function setupAnalyticsLanguage() {
+      let lang = localStorage.getItem('language') || 'en';
+      if (lang === 'sw') translateAnalyticsToSwahili();
+    }
+    window.addEventListener('DOMContentLoaded', setupAnalyticsLanguage);
+
+    // Universal language loader for all pages
+    window.addEventListener('DOMContentLoaded', function() {
+      const lang = localStorage.getItem('agriLang') || 'en';
+      // Set language selector if present
+      const langSel = document.getElementById('languageSelect');
+      if (langSel) langSel.value = lang;
+      // Call your translation function here, e.g.:
+      // updateLanguage(lang);
+    });
+  </script>
+</body>
+</html>

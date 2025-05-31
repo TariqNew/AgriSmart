@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AgriAi Community</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #e0ffe0;
+      margin: 0;
+      padding: 0;
+    }
+    .community-container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px #b2dfdb88;
+      padding: 32px 28px 24px 28px;
+    }
+    h1 {
+      color: #388e3c;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    .post-form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .post-form input, .post-form textarea {
+      flex: 1;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #b2dfdb;
+      font-size: 1em;
+    }
+    .post-form button {
+      background: #388e3c;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .post-form button:hover {
+      background: #2e7030;
+    }
+    .posts {
+      margin-top: 18px;
+    }
+    .post {
+      background: #f4fef4;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 8px #b2dfdb33;
+    }
+    .post .meta {
+      font-size: 0.95em;
+      color: #388e3c;
+      margin-bottom: 6px;
+    }
+    .post .content {
+      font-size: 1.08em;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+  <div class="community-container">
+    <h1>AgriAi Community</h1>
+    <form class="post-form" id="postForm" autocomplete="off">
+      <input type="text" id="userName" placeholder="Your name" required style="max-width:120px;">
+      <textarea id="userPost" placeholder="Share your question, tip, or experience..." rows="2" required></textarea>
+      <button type="submit">Post</button>
+    </form>
+    <div class="posts" id="posts"></div>
+  </div>
+  <script>
+    // Load posts from localStorage
+    function loadPosts() {
+      const posts = JSON.parse(localStorage.getItem('communityPosts') || '[]');
+      const postsDiv = document.getElementById('posts');
+      postsDiv.innerHTML = '';
+      posts.reverse().forEach(post => {
+        const div = document.createElement('div');
+        div.className = 'post';
+        div.innerHTML = `<div class="meta">${post.name} • ${new Date(post.time).toLocaleString()}</div>
+                         <div class="content">${post.content}</div>`;
+        postsDiv.appendChild(div);
+      });
+    }
+    loadPosts();
+
+    // Handle new post
+    document.getElementById('postForm').onsubmit = function(e) {
+      e.preventDefault();
+      const name = document.getElementById('userName').value.trim() || 'Anonymous';
+      const content = document.getElementById('userPost').value.trim();
+      if (!content) return;
+      let posts = JSON.parse(localStorage.getItem('communityPosts') || '[]');
+      posts.push({ name, content, time: new Date().toISOString() });
+      localStorage.setItem('communityPosts', JSON.stringify(posts));
+      document.getElementById('userPost').value = '';
+      loadPosts();
+    };
+
+    const swahiliStrings = {
+      "AgriAi Community": "Jumuiya ya AgriAi",
+      "Your name": "Jina lako",
+      "Share your question, tip, or experience...": "Shiriki swali lako, ushauri, au uzoefu...",
+      "Post": "Tuma"
+    };
+    function translateCommunityToSwahili() {
+      document.querySelector('h1').textContent = swahiliStrings["AgriAi Community"];
+      document.getElementById('userName').placeholder = swahiliStrings["Your name"];
+      document.getElementById('communityInput').placeholder = swahiliStrings["Share your question, tip, or experience..."];
+      document.getElementById('postBtn').textContent = swahiliStrings["Post"];
+    }
+    function setupCommunityLanguage() {
+      let lang = localStorage.getItem('language') || 'en';
+      if (lang === 'sw') translateCommunityToSwahili();
+    }
+    window.addEventListener('DOMContentLoaded', setupCommunityLanguage);
+
+    // Universal language loader for all pages
+    window.addEventListener('DOMContentLoaded', function() {
+      const lang = localStorage.getItem('agriLang') || 'en';
+      // Set language selector if present
+      const langSel = document.getElementById('languageSelect');
+      if (langSel) langSel.value = lang;
+      // Call your translation function here, e.g.:
+      // updateLanguage(lang);
+    });
+  </script>
+</body>
+</html>

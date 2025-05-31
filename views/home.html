@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriSmart</title>
+    <link rel="stylesheet" href="styles/home.css">
+    <style>
+      body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: #e0ffe0;
+        margin: 0;
+        padding: 0;
+      }
+      .hero {
+        background: linear-gradient(90deg, #388e3c 0%, #b2dfdb 100%);
+        color: #fff;
+        padding: 64px 0 48px 0;
+        text-align: center;
+      }
+      .hero h1 {
+        font-size: 2.8em;
+        margin-bottom: 0.3em;
+        font-weight: 700;
+        letter-spacing: -1px;
+      }
+      .hero p {
+        font-size: 1.3em;
+        margin-bottom: 1.5em;
+        font-weight: 400;
+      }
+      .hero .cta-btn {
+        background: #fff;
+        color: #388e3c;
+        border: none;
+        border-radius: 8px;
+        padding: 14px 36px;
+        font-size: 1.1em;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 2px 12px #b2dfdb55;
+        transition: background 0.2s, color 0.2s;
+      }
+      .hero .cta-btn:hover {
+        background: #388e3c;
+        color: #fff;
+        border: 1px solid #fff;
+      }
+      .features-section {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 36px;
+        margin: 0 auto;
+        max-width: 1100px;
+        padding: 48px 16px 32px 16px;
+      }
+      .feature-card {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 8px 32px #b2dfdb88;
+        width: 260px;
+        min-height: 260px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 28px 18px 22px 18px;
+        transition: box-shadow 0.2s, transform 0.2s;
+        cursor: pointer;
+        text-align: center;
+      }
+      .feature-card:hover {
+        box-shadow: 0 12px 36px #388e3c44;
+        transform: translateY(-6px) scale(1.03);
+      }
+      .feature-card img {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 18px;
+        border-radius: 12px;
+        object-fit: cover;
+        background: #e0ffe0;
+      }
+      .feature-title {
+        font-size: 1.2em;
+        font-weight: 600;
+        color: #388e3c;
+        margin-bottom: 0.5em;
+      }
+      .feature-desc {
+        font-size: 1em;
+        color: #333;
+        margin-bottom: 1.2em;
+      }
+      .feature-card .start-btn {
+        background: #388e3c;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 22px;
+        font-size: 1em;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .feature-card .start-btn:hover {
+        background: #2e7030;
+      }
+      /* Responsive */
+      @media (max-width: 900px) {
+        .features-section {
+          flex-direction: column;
+          align-items: center;
+        }
+        .feature-card {
+          width: 90%;
+          margin-bottom: 18px;
+        }
+      }
+      /* Dark mode support */
+      body.dark-mode {
+        background: #222;
+        color: #e0ffe0;
+      }
+      body.dark-mode .hero {
+        background: linear-gradient(90deg, #222 0%, #388e3c 100%);
+        color: #e0ffe0;
+      }
+      body.dark-mode .feature-card {
+        background: #222;
+        color: #e0ffe0;
+        box-shadow: 0 8px 32px #00000088;
+      }
+      body.dark-mode .feature-title {
+        color: #76ff03;
+      }
+      body.dark-mode .feature-desc {
+        color: #e0ffe0;
+      }
+      body.dark-mode .feature-card .start-btn {
+        background: #76ff03;
+        color: #222;
+      }
+      body.dark-mode .feature-card .start-btn:hover {
+        background: #388e3c;
+        color: #fff;
+      }
+      /* Dropdown hover and active effect */
+      .dropdown-content a:hover {
+        background: #e0ffe0 !important;
+        color: #222 !important;
+      }
+      /* Assistant popup dark mode */
+      body.dark-mode #aiAssistantOverlay,
+      #aiAssistantOverlay.dark-mode {
+        background: rgba(0,0,0,0.7) !important;
+      }
+      body.dark-mode .assistant-popup,
+      #aiAssistantOverlay.dark-mode .assistant-popup {
+        background: #1e1e1e !important;
+        box-shadow: -4px 0 32px #00000088 !important;
+        color: #e0ffe0;
+      }
+      body.dark-mode .assistant-popup h2 {
+        color: #76ff03 !important;
+      }
+      body.dark-mode .assistant-popup .chat-area {
+        background: #232323 !important;
+        color: #e0ffe0 !important;
+      }
+      body.dark-mode .assistant-popup input {
+        background: #333 !important;
+        color: #e0ffe0 !important;
+        border: 1px solid #76ff03 !important;
+      }
+      body.dark-mode .assistant-popup button.send-btn {
+        background: #76ff03 !important;
+        color: #222 !important;
+      }
+      body.dark-mode .assistant-popup button.send-btn:hover {
+        background: #388e3c !important;
+        color: #fff !important;
+      }
+      body.dark-mode .assistant-popup .close-btn {
+        color: #76ff03 !important;
+      }
+    </style>
+</head>
+<body>
+    <!-- Dropdown menu for navigation -->
+    <div class="dropdown" style="position: fixed; top: 32px; right: 32px; z-index: 500;">
+      <button onclick="toggleDropdown()" class="dropbtn" title="Menu"
+        style="background: #fff; border-radius: 16px; border: none; width: 54px; height: 54px; box-shadow: 0 2px 12px #b2dfdb55; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+        <img src="icons/dropmenu.png" alt="Menu" style="width:28px;height:28px;">
+      </button>
+      <div id="myDropdown" class="dropdown-content"
+        style="display:none; position: absolute; right: 0; top: 60px; background: #fff; min-width: 210px; box-shadow: 0 8px 32px #b2dfdb88; border-radius: 16px; overflow: hidden; padding: 10px 0;">
+        <a href="settings.html" style="display: flex; align-items: center; padding: 12px 22px; gap: 12px; font-size: 1.08em; color: #388e3c; text-decoration: none; transition: background 0.18s;">
+          <img src="icons/settings.png" class="foot" style="width:22px;"> Settings
+        </a>
+        <a href="community.html" style="display: flex; align-items: center; padding: 12px 22px; gap: 12px; font-size: 1.08em; color: #388e3c; text-decoration: none; transition: background 0.18s;">
+          <img src="icons/community.png" class="foot" style="width:22px;"> Community
+        </a>
+        <a href="farms.html" style="display: flex; align-items: center; padding: 12px 22px; gap: 12px; font-size: 1.08em; color: #388e3c; text-decoration: none; transition: background 0.18s;">
+          <img src="icons/farm.png" class="foot" style="width:22px;"> Farms
+        </a>
+        <a href="user-profile.html" id="profileLink" style="display: flex; align-items: center; padding: 12px 22px; gap: 12px; font-size: 1.08em; color: #388e3c; text-decoration: none; transition: background 0.18s;">
+          <img src="icons/profile.jpg" class="foot" style="width:22px; border-radius:50%;"> Profile
+        </a>
+      </div>
+    </div>
+
+    <!-- Dark mode toggle button on the left side -->
+    <button id="darkModeToggle"
+      style="
+        position: fixed;
+        top: 40px;
+        left: 32px;
+        z-index: 501;
+        background: #b2dfdb;
+        border: none;
+        border-radius: 50%;
+        width: 54px;
+        height: 54px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 12px #b2dfdb55;
+        cursor: pointer;
+        transition: background 0.2s;
+      "
+      title="Toggle Dark Mode"
+    >
+      <img src="icons/darkmode.png" alt="Dark Mode" style="width:28px;height:28px;">
+    </button>
+
+    <!-- Add this language selector near the top, e.g. after the dark mode button -->
+    <select id="languageSelect" style="position:fixed;top:40px;left:100px;z-index:502;padding:7px 16px;border-radius:8px;border:1px solid #b2dfdb;background:#fff;color:#388e3c;font-size:1em;">
+      <option value="en">English</option>
+      <option value="sw">Kiswahili</option>
+    </select>
+
+    <!-- Hero Section -->
+    <div class="hero">
+      <h1>AgriAi</h1>
+      <p>Empowering Farmers with AI for a Better Harvest.<br>
+      Get personalized insights, diagnosis, and recommendations for your farm.</p>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features-section">
+      <div class="feature-card" onclick="location.href='disease-diagnosis.html'">
+        <img src="farm pics/farming.jpg" alt="Pest Diagnosis">
+        <div class="feature-title">Pest Diagnosis</div>
+        <div class="feature-desc">Analyze crop images for pest identification and get treatment recommendations.</div>
+        <button class="start-btn">Start</button>
+      </div>
+      <div class="feature-card" onclick="location.href='location.html'">
+        <img src="farm pics/sky.jpg" alt="Weather Insights">
+        <div class="feature-title">Weather Insights</div>
+        <div class="feature-desc">Get real-time weather updates and forecasts tailored to your crops.</div>
+        <button class="start-btn">Start</button>
+      </div>
+      <div class="feature-card" id="cropAdvisoryCard">
+        <img src="farm pics/crops.jpg" alt="Crop Advisory">
+        <div class="feature-title">Crop Advisory</div>
+        <div class="feature-desc">Learn about crop preservation for higher yields and sustainable farming.</div>
+        <button class="start-btn">Start</button>
+      </div>
+      <div class="feature-card" onclick="location.href='data-analytics.html'">
+        <img src="farm pics/AI.jpg" alt="Data Analytics & Report">
+        <div class="feature-title">Data Analytics & Report</div>
+        <div class="feature-desc">View your farm questions, AI answers, and interactive analytics reports.</div>
+        <button class="start-btn">Start</button>
+      </div>
+    </div>
+
+    <!-- AI Assistant Icon (fixed, bottom right) -->
+    <div id="ai-assistant"
+      style="
+        position: fixed;
+        bottom: 28px;
+        right: 28px;
+        z-index: 300;
+        background: #fff;
+        border-radius: 50%;
+        box-shadow: 0 4px 16px #b2dfdb88;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: box-shadow 0.2s;
+      "
+      title="Ask Agri AI"
+    >
+      <img src="icons/ai.png" alt="AI Assistant" style="width:38px;height:38px;">
+    </div>
+
+    <!-- AI Assistant Overlay (reshaped, modern look) -->
+    <div id="aiAssistantOverlay" style="display:none; position:fixed; top:0; right:0; width:420px; height:100vh; background:rgba(0,0,0,0.35); z-index:9999; display:flex; align-items:center; justify-content:flex-end;">
+      <div class="assistant-popup" id="assistantPopup" style="margin:0 0 0 auto; height:92vh; max-height:760px; width:370px; background:#fff; border-radius: 24px 0 0 24px; box-shadow: -4px 0 32px #b2dfdb88; display:flex; flex-direction:column; position:relative;">
+        <button class="close-btn" onclick="document.getElementById('aiAssistantOverlay').style.display='none'" title="Close"
+          style="position:absolute; top:18px; right:18px; background:none; border:none; font-size:2em; color:#388e3c; cursor:pointer;">&times;</button>
+        <div style="display:flex; flex-direction:column; align-items:center; margin-top:36px; margin-bottom:10px;">
+          <img src="icons/ai.png" alt="AI Assistant" style="width:60px; height:60px; border-radius:16px; margin-bottom:10px;">
+          <h2 style="margin:0; color:#388e3c; font-size:1.3em;">Bwana shamba</h2>
+          <div style="font-size:1em; color:#388e3c; margin-bottom:10px;">Ask anything about your farm</div>
+        </div>
+        <div class="chat-area" id="chatArea" style="flex:1; background:#f4fef4; border-radius:10px; padding:14px 10px; margin:0 18px 12px 18px; font-size:1em; color:#333; overflow-y:auto; min-height:180px; max-height:340px;">
+          Hello! How can I help you with your farming needs today?
+        </div>
+        <form class="input-row" id="chatForm" autocomplete="off" style="display:flex; gap:6px; margin:0 18px 18px 18px;">
+          <input type="text" id="userInput" placeholder="Type your question..." required style="flex:1; min-width:0; padding:10px; border-radius:8px;height:20px; border:1px solid #b2dfdb;font-size:1em;">
+          <button type="submit" class="send-btn" style="padding: 0 16px; min-width:44px; height:40px; font-size:1.2em; display:flex; align-items:center; justify-content:center; background:#388e3c; border:none; border-radius:8px; color:#fff; cursor:pointer;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <circle cx="11" cy="11" r="7" stroke="#fff" stroke-width="2"/>
+              <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // Dropdown menu toggle
+      function toggleDropdown() {
+        var dd = document.getElementById("myDropdown");
+        dd.style.display = dd.style.display === "block" ? "none" : "block";
+      }
+      // Close dropdown if clicked outside
+      window.onclick = function(event) {
+        if (!event.target.matches('.dropbtn') && !event.target.closest('.dropbtn')) {
+          var dropdowns = document.getElementsByClassName("dropdown-content");
+          for (var i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.style.display === "block") {
+              openDropdown.style.display = "none";
+            }
+          }
+        }
+      };
+
+      // Dark mode toggle for left button
+      document.getElementById('darkModeToggle').onclick = function(e) {
+        e.preventDefault();
+        const isDark = document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', isDark);
+        // Also update overlay if open
+        const overlay = document.getElementById('aiAssistantOverlay');
+        if (overlay) {
+          if (isDark) overlay.classList.add('dark-mode');
+          else overlay.classList.remove('dark-mode');
+        }
+      };
+
+      // Apply dark mode on page load if set in localStorage
+      window.addEventListener('DOMContentLoaded', function() {
+        if (localStorage.getItem('darkMode') === 'true') {
+          document.body.classList.add('dark-mode');
+        } else {
+          document.body.classList.remove('dark-mode');
+        }
+      });
+
+      // Show the AI Assistant overlay ONLY when the icon is clicked
+      document.getElementById('ai-assistant').onclick = function() {
+        document.getElementById('aiAssistantOverlay').style.display = 'flex';
+        // Apply dark mode if needed
+        if (localStorage.getItem('darkMode') === 'true') {
+          document.getElementById('aiAssistantOverlay').classList.add('dark-mode');
+        } else {
+          document.getElementById('aiAssistantOverlay').classList.remove('dark-mode');
+        }
+      };
+
+      // Make Crop Advisory open AI Assistant
+      document.getElementById('cropAdvisoryCard').onclick = function() {
+        document.getElementById('aiAssistantOverlay').style.display = 'flex';
+        if (localStorage.getItem('darkMode') === 'true') {
+          document.getElementById('aiAssistantOverlay').classList.add('dark-mode');
+        } else {
+          document.getElementById('aiAssistantOverlay').classList.remove('dark-mode');
+        }
+      };
+
+      window.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('aiAssistantOverlay').style.display = 'none';
+        // Apply dark mode on page load if set in localStorage
+        if (localStorage.getItem('darkMode') === 'true') {
+          document.body.classList.add('dark-mode');
+        } else {
+          document.body.classList.remove('dark-mode');
+        }
+      });
+
+      // --- AI Assistant Chat Integration ---
+      const chatArea = document.getElementById('chatArea');
+      const chatForm = document.getElementById('chatForm');
+      const userInput = document.getElementById('userInput');
+
+      chatForm.onsubmit = async function(e) {
+        e.preventDefault();
+        const userText = userInput.value.trim();
+        if (!userText) return;
+        const userName = localStorage.getItem('userName') || 'Farmer';
+        chatArea.innerHTML += `<div style="margin-top:8px;"><b>${userName}:</b> ${userText}</div>`;
+        userInput.value = '';
+        chatArea.scrollTop = chatArea.scrollHeight;
+        userInput.disabled = true;
+
+        try {
+          const res = await fetch('/incoming-sms', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              from: userName,
+              text: userText,
+              to: "AgriAI-Web"
+            })
+          });
+          const data = await res.json();
+          const reply = data.reply || "Sorry, no response.";
+          chatArea.innerHTML += `<div style="margin-top:6px;"><b>AI:</b> ${reply}</div>`;
+          chatArea.scrollTop = chatArea.scrollHeight;
+        } catch (err) {
+          chatArea.innerHTML += `<div style="margin-top:6px;color:#c00;"><b>AI:</b> Sorry, server is unreachable.</div>`;
+          chatArea.scrollTop = chatArea.scrollHeight;
+        }
+        userInput.disabled = false;
+        userInput.focus();
+      };
+
+      // Language translations for English and Swahili
+const translations = {
+  en: {
+    heroTitle: "AgriAi",
+    heroDesc: "Empowering Farmers with AI for a Better Harvest.<br>Get personalized insights, diagnosis, and recommendations for your farm.",
+    features: [
+      {
+        title: "Pest Diagnosis",
+        desc: "Analyze crop images for pest identification and get treatment recommendations."
+      },
+      {
+        title: "Weather Insights",
+        desc: "Get real-time weather updates and forecasts tailored to your crops."
+      },
+      {
+        title: "Crop Advisory",
+        desc: "Learn about crop preservation for higher yields and sustainable farming."
+      },
+      {
+        title: "Data Analytics & Report",
+        desc: "View your farm questions, AI answers, and interactive analytics reports."
+      }
+    ],
+    aiTitle: "Agri AI Assistant",
+    aiDesc: "Ask anything about your farm",
+    aiPlaceholder: "Type your question...",
+    aiHello: "Hello! How can I help you with your farming needs today?",
+    aiReply: "AI",
+    menu: {
+      settings: "Settings",
+      community: "Community",
+      farms: "Farms",
+      profile: "Profile"
+    }
+  },
+  sw: {
+    heroTitle: "AgriAi",
+    heroDesc: "Kuwawezesha Wakulima kwa AI kwa Mavuno Bora.<br>Pata maarifa, utambuzi, na mapendekezo binafsi kwa shamba lako.",
+    features: [
+      {
+        title: "Utambuzi wa Wadudu",
+        desc: "Changanua picha za mazao kutambua wadudu na upate mapendekezo ya matibabu."
+      },
+      {
+        title: "Taarifa za Hali ya Hewa",
+        desc: "Pata taarifa za hali ya hewa na utabiri maalum kwa mazao yako."
+      },
+      {
+        title: "Ushauri wa Mazao",
+        desc: "Jifunze kuhusu uhifadhi wa mazao kwa mavuno mengi na kilimo endelevu."
+      },
+      {
+        title: "Takwimu & Ripoti",
+        desc: "Tazama maswali yako ya shamba, majibu ya AI, na ripoti za takwimu."
+      }
+    ],
+    aiTitle: "Msaidizi wa AI wa Kilimo",
+    aiDesc: "Uliza chochote kuhusu shamba lako",
+    aiPlaceholder: "Andika swali lako...",
+    aiHello: "Habari! Nawezaje kukusaidia kuhusu mahitaji yako ya kilimo leo?",
+    aiReply: "AI",
+    menu: {
+      settings: "Mipangilio",
+      community: "Jumuiya",
+      farms: "Mashamba",
+      profile: "Wasifu"
+    }
+  }
+};
+
+// Update all text content based on selected language
+function updateLanguage(lang) {
+  // Hero section
+  document.querySelector('.hero h1').innerHTML = translations[lang].heroTitle;
+  document.querySelector('.hero p').innerHTML = translations[lang].heroDesc;
+
+  // Features section
+  const featureCards = document.querySelectorAll('.feature-card');
+  translations[lang].features.forEach((f, i) => {
+    if (featureCards[i]) {
+      featureCards[i].querySelector('.feature-title').textContent = f.title;
+      featureCards[i].querySelector('.feature-desc').textContent = f.desc;
+      featureCards[i].querySelector('.start-btn').textContent = lang === 'en' ? 'Start' : 'Anza';
+    }
+  });
+
+  // AI Assistant popup
+  document.querySelector('#assistantPopup h2').textContent = translations[lang].aiTitle;
+  document.querySelector('#assistantPopup div[style*="font-size:1em"]').textContent = translations[lang].aiDesc;
+  document.getElementById('userInput').placeholder = translations[lang].aiPlaceholder;
+
+  // If chat area is at initial state, update greeting
+  const chatArea = document.getElementById('chatArea');
+  if (
+    chatArea.innerText.trim() === translations.en.aiHello ||
+    chatArea.innerText.trim() === translations.sw.aiHello
+  ) {
+    chatArea.textContent = translations[lang].aiHello;
+  }
+
+  // Dropdown menu items
+  const menu = translations[lang].menu;
+  document.querySelector('#myDropdown a[href="settings.html"]').innerHTML = `<img src="icons/settings.png" class="foot" style="width:22px;"> ${menu.settings}`;
+  document.querySelector('#myDropdown a[href="community.html"]').innerHTML = `<img src="icons/community.png" class="foot" style="width:22px;"> ${menu.community}`;
+  document.querySelector('#myDropdown a[href="farms.html"]').innerHTML = `<img src="icons/farm.png" class="foot" style="width:22px;"> ${menu.farms}`;
+  document.querySelector('#myDropdown a[href="user-profile.html"]').innerHTML = `<img src="icons/profile.jpg" class="foot" style="width:22px; border-radius:50%;"> ${menu.profile}`;
+}
+
+// Listen for language changes
+document.getElementById('languageSelect').addEventListener('change', function() {
+  const lang = this.value;
+  localStorage.setItem('agriLang', lang);
+  updateLanguage(lang);
+});
+
+// On page load, set language from localStorage or default to English
+window.addEventListener('DOMContentLoaded', function() {
+  const lang = localStorage.getItem('agriLang') || 'en';
+  document.getElementById('languageSelect').value = lang;
+  updateLanguage(lang);
+});
+
+// Update AI Assistant chat reply label (optional, for future use)
+function getAIReplyLabel() {
+  const lang = localStorage.getItem('agriLang') || 'en';
+  return translations[lang].aiReply;
+}
+    </script>
+</body>
+</html>

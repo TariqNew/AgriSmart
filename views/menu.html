@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/menu.css">
+    <title>Menu</title>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+        <strong>AgriAssist</strong>
+    </div>
+  </div>
+
+  <h2>Welcome, User</h2>
+
+  <div class="card">
+    <img src="farm pics/farming.jpg">
+    <div class="card-content">
+        <div class="card-title">Pest Diagnosis</div>
+        <div class="card-subtitle">Quick Scan<br>
+        Analyze crop images for Pest identification and treatment recommendation
+    </div>
+    <button class="start-btn" onclick="location.href='Pest Diagnosis.html'">Start</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="farm pics/sky.jpg">
+    <div class="card-content">
+        <div class="card-title">Weather Insights</div>
+        <div class="card-subtitle">Stay informed<br>
+            Get real time weather updates and forecasts tailored to your crops
+        </div>
+        <button class="start-btn" onclick="location.href='location.html'">Start</button>
+    </div>
+  </div>
+
+ <div class="card">
+    <img src="farm pics/crops.jpg">
+    <div class="card-content">
+        <div class="card-title">Crop Advisory</div>
+        <div class="card-subtitle">Be Advised<br>
+            This educates you on crop preservation for higher yields 
+        </div>
+        <button class="start-btn" onclick="alert('Crop Advisory feature coming soon!')">Start</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="farm pics/AI.jpg">
+    <div class="card-content">
+        <div class="card-title">AI Recommendation</div>
+        <div class="card-subtitle">Artificial Intelligence<br>
+            Get a variety of AI that can help you in your farming problems
+        </div>
+        <button class="start-btn" onclick="alert('AI Recommendation feature coming soon!')">Start</button>
+    </div>
+  </div>
+
+<script>
+// Highlight card on hover
+document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('mouseenter', () => card.style.boxShadow = '0 4px 16px #b2dfdb');
+    card.addEventListener('mouseleave', () => card.style.boxShadow = '');
+});
+  // Redirect to login if not logged in
+  window.addEventListener('DOMContentLoaded', function() {
+  if (!localStorage.getItem('userEmail')) {
+    window.location.href = 'login.html';
+  }
+});
+  const swahiliStrings = {
+    "Settings": "Mipangilio",
+    "Community": "Jumuiya",
+    "Farms": "Mashamba",
+    "Profile": "Wasifu",
+    // ...add more as needed
+  };
+  function translateMenuToSwahili() {
+    // Add selectors for your menu items
+  }
+  function setupMenuLanguage() {
+    let lang = localStorage.getItem('language') || 'en';
+    if (lang === 'sw') translateMenuToSwahili();
+  }
+  window.addEventListener('DOMContentLoaded', setupMenuLanguage);
+</script>
+</body>
+</html>

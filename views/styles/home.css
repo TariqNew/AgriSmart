@@ -1,0 +1,81 @@
+body {
+    font-family: Arial;
+    font-weight: bold;
+    font-size: 25px;
+    background-color: #e7f0e8;
+}
+.hero h1{
+ font-size:18px;
+}
+.hero p{
+    font-size: 15px;
+}
+
+.icon {
+    height: 40px;
+    cursor: pointer;
+    padding-left: 30px;
+}
+
+.agriContainer{
+    text-align: center;
+}
+
+
+.Selection {
+   border: none;
+   cursor: pointer;
+   border-radius: 20px;
+   padding: 12px;
+   height: 40px;
+   background-color: rgb(35, 240, 8);
+   object-fit: contain;
+   transition: transform 0.2s;
+}
+
+.Selection:hover {
+ transform: scale(1.15);
+}
+
+
+
+.foot {
+    height: 40px;
+    cursor: pointer;
+}
+
+.responsive-footer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 12px 0;
+    background: #f8f8f8;
+    border-top: 1px solid #ddd;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.responsive-footer .foot {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    transition: transform 0.2s;
+}
+
+.responsive-footer .foot:hover {
+    transform: scale(1.15);
+}
+
+@media (max-width: 600px) {
+    .responsive-footer .foot {
+        width: 24px;
+        height: 24px;
+    }
+    .responsive-footer {
+        padding: 8px 0;
+    }
+}
+

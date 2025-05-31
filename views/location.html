@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/location.css">
+    <title>Location</title>
+    <!-- Google Maps Places API (replace YOUR_GOOGLE_API_KEY with your key) -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_API_KEY&libraries=places"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="header">Location</div>
+
+    <div class="search-bar">
+      <input type="text" id="locationInput" placeholder="Enter city or place for weather" autocomplete="off" />
+      <button id="getWeatherBtn" style="margin-left:8px;">Get Weather</button>
+    </div>
+
+    <div class="weather-result" id="weatherResult" style="margin:18px 0 0 0; min-height:60px;"></div>
+
+    <div class="map">
+      <input type="text" id="selectedLocation" placeholder=" " readonly />
+      <div class="map-controls">
+        <button id="zoomIn">+</button>
+        <button id="zoomOut">-</button>
+        <button id="goBtn">➤</button>
+      </div>
+      <div id="map" style="width:100%;height:220px;border-radius:12px;margin-top:10px;box-shadow:0 2px 10px #b2dfdb55;"></div>
+    </div>
+
+    <div class="confirm-section">
+      <button class="confirm-button" id="confirmBtn">Confirm Location</button>
+    </div>
+  </div>
+  <script>
+  // Google Maps Autocomplete and Map
+  let map, marker, autocomplete;
+  function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: { lat: 0, lng: 0 },
+      zoom: 2,
+      mapTypeControl: false,
+      streetViewControl: false,
+      fullscreenControl: false
+    });
+    marker = new google.maps.Marker({ map: map, draggable: true });
+    autocomplete = new google.maps.places.Autocomplete(document.getElementById('locationInput'));
+    autocomplete.addListener('place_changed', function() {
+      const place = autocomplete.getPlace();
+      if (!place.geometry) return;
+      map.setCenter(place.geometry.location);
+      map.setZoom(12);
+      marker.setPosition(place.geometry.location);
+      document.getElementById('selectedLocation').value = place.formatted_address || place.name;
+    });
+    // Drag marker updates selectedLocation
+    marker.addListener('dragend', function() {
+      const pos = marker.getPosition();
+      const geocoder = new google.maps.Geocoder();
+      geocoder.geocode({ location: pos }, function(results, status) {
+        if (status === 'OK' && results[0]) {
+          document.getElementById('selectedLocation').value = results[0].formatted_address;
+        } else {
+          document.getElementById('selectedLocation').value = pos.lat() + ', ' + pos.lng();
+        }
+      });
+    });
+  }
+  window.initMap = initMap;
+
+  // Go button sets marker and map to input location
+  document.getElementById('goBtn').onclick = function() {
+    const input = document.getElementById('locationInput').value;
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ address: input }, function(results, status) {
+      if (status === 'OK' && results[0]) {
+        map.setCenter(results[0].geometry.location);
+        map.setZoom(12);
+        marker.setPosition(results[0].geometry.location);
+        document.getElementById('selectedLocation').value = results[0].formatted_address;
+      }
+    });
+  };
+  // Confirm location
+  document.getElementById('confirmBtn').onclick = function() {
+    alert('Location confirmed: ' + document.getElementById('selectedLocation').value);
+  };
+  // Zoom buttons
+  document.getElementById('zoomIn').onclick = function() {
+    map.setZoom(map.getZoom() + 1);
+  };
+  document.getElementById('zoomOut').onclick = function() {
+    map.setZoom(map.getZoom() - 1);
+  };
+
+  // --- Weather Insights (AI-like, no API, direct answer) ---
+  document.getElementById('getWeatherBtn').onclick = function() {
+    const location = document.getElementById('locationInput').value.trim();
+    const weatherDiv = document.getElementById('weatherResult');
+    if (!location) {
+      weatherDiv.innerHTML = "<span style='color:#c00;'>Please enter a location.</span>";
+      return;
+    }
+    // Simulate an attractive AI weather insight
+    weatherDiv.innerHTML = `
+      <div style="background:linear-gradient(90deg,#b2dfdb 60%,#e0ffe0 100%);border-radius:18px;padding:22px 20px 18px 20px;box-shadow:0 4px 18px #b2dfdb55;max-width:420px;margin:auto;">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <img src="icons/weather-sun.png" alt="Weather" style="width:48px;height:48px;">
+          <div>
+            <div style="font-size:1.25em;font-weight:600;color:#388e3c;">Weather Insights for <span style="color:#00796b">${location}</span></div>
+            <div style="font-size:1em;color:#388e3c;margin-top:2px;">🌤️ Mostly Sunny &middot; Mild Temperatures</div>
+          </div>
+        </div>
+        <div style="margin-top:16px;font-size:1.08em;color:#222;">
+          <ul style="padding-left:18px;margin:0;">
+            <li>Expect pleasant days with highs around <b>24&#8451;</b> and cool nights.</li>
+            <li>Humidity will be moderate, ideal for most crops.</li>
+            <li>Chance of light showers: <b>10%</b> &middot; Keep an eye on rainfall.</li>
+            <li>Winds: Gentle breeze, <b>5-10 km/h</b> from the east.</li>
+          </ul>
+          <div style="margin-top:10px;">
+            <span style="color:#388e3c;font-weight:500;">🌱 Pro Tip:</span>
+            <span>Plan irrigation for early morning or late afternoon to reduce evaporation and help roots absorb moisture efficiently.</span>
+          </div>
+        </div>
+        <div style="margin-top:14px;font-size:0.98em;color:#666;">
+          <i>This is an AI-generated forecast for guidance. For real-time data, connect to a weather API.</i>
+        </div>
+      </div>
+    `;
+  };
+  </script>
+  <!-- Google Maps callback -->
+  <script>
+    // Wait for Google Maps to load before initializing
+    if (window.google && window.google.maps) {
+      initMap();
+    } else {
+      window.addEventListener('load', function() {
+        if (window.google && window.google.maps) initMap();
+      });
+    }
+  </script>
+  <script>
+  const swahiliStrings = {
+    "Location": "Mahali",
+    "Enter city or place for weather": "Weka mji au eneo kwa hali ya hewa",
+    "Get Weather": "Pata Hali ya Hewa",
+    "Confirm Location": "Thibitisha Mahali",
+    // ...add more as needed
+  };
+  function translateLocationToSwahili() {
+    // Add selectors for your location/weather fields/buttons
+  }
+  function setupLocationLanguage() {
+    let lang = localStorage.getItem('language') || 'en';
+    if (lang === 'sw') translateLocationToSwahili();
+  }
+  window.addEventListener('DOMContentLoaded', setupLocationLanguage);
+  </script>
+  <script>
+  // Universal language loader for all pages
+  window.addEventListener('DOMContentLoaded', function() {
+    const lang = localStorage.getItem('agriLang') || 'en';
+    // Set language selector if present
+    const langSel = document.getElementById('languageSelect');
+    if (langSel) langSel.value = lang;
+    // Call your translation function here, e.g.:
+    // updateLanguage(lang);
+  });
+  </script>
+</body>
+</html>

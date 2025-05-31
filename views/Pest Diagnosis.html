@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles/pest diagnosis.css">
+  <title>Pest Diagnosis</title>
+</head>
+<body>
+  <div class="card">
+    <h1>Pest Diagnosis</h1>
+    <img src="farm pics/pestcrop.jpg" alt="Plant with aphid" />
+    <div class="content">
+      <h2>Pest Diagnosis Results</h2>
+      <p>
+        Based on the image you provided, the AI has identified the presence of aphids on your crop.
+        Aphids are small, sap-sucking insects that can cause significant damage to plants by weakening
+        them and transmitting diseases.
+      </p>
+
+      <div class="recommendation">
+        <h3>🌿 Natural Treatments</h3>
+        <p>Apply neem oil or insecticidal soap to the affected areas. These natural treatments are effective and eco-friendly.</p>
+      </div>
+
+      <div class="recommendation">
+        <h3>🕷️ Biological Control</h3>
+        <p>Introduce natural predators like ladybugs or lacewings to your garden. These beneficial insects help reduce aphid populations.</p>
+      </div>
+
+      <div class="recommendation">
+        <h3>🔍 Regular Monitoring</h3>
+        <p>Regularly inspect your plants for signs of aphids. Early detection can prevent larger infestations.</p>
+      </div>
+
+      <a href="#" class="btn" id="detailsBtn">View More Details</a>
+    </div>
+  </div>
+  <script>
+    document.getElementById('detailsBtn').onclick = function(e) {
+      e.preventDefault();
+      alert('More details coming soon!');
+    };
+  </script>
+  <script>
+  const swahiliStrings = {
+    "Pest Diagnosis": "Utambuzi wa Wadudu",
+    "Pest Diagnosis Results": "Matokeo ya Utambuzi wa Wadudu",
+    "Based on the image you provided, the AI has identified the presence of aphids on your crop.": "Kulingana na picha uliyoleta, AI imetambua uwepo wa vidukari kwenye zao lako.",
+    "Aphids are small, sap-sucking insects that can cause significant damage to plants by weakening them and transmitting diseases.": "Vidukari ni wadudu wadogo wanaonyonya utomvu na wanaweza kudhoofisha mimea na kusambaza magonjwa.",
+    "🌿 Natural Treatments": "🌿 Tiba Asilia",
+    "Apply neem oil or insecticidal soap to the affected areas. These natural treatments are effective and eco-friendly.": "Tumia mafuta ya mwarobaini au sabuni ya kuua wadudu kwenye maeneo yaliyoathirika. Tiba hizi ni bora na rafiki kwa mazingira.",
+    "🕷️ Biological Control": "🕷️ Udhibiti wa Kibiolojia",
+    "Introduce natural predators like ladybugs or lacewings to your garden. These beneficial insects help reduce aphid populations.": "Weka wadudu wanaowinda kama vithurura au vipepeo kwenye bustani yako. Wadudu hawa husaidia kupunguza vidukari.",
+    "🔍 Regular Monitoring": "🔍 Ufuatiliaji wa Mara kwa Mara",
+    "Regularly inspect your plants for signs of aphids. Early detection can prevent larger infestations.": "Kagua mimea yako mara kwa mara kwa dalili za vidukari. Kugundua mapema kunasaidia kuzuia maambukizi makubwa.",
+    "View More Details": "Tazama Maelezo Zaidi",
+    "More details coming soon!": "Maelezo zaidi yanakuja hivi karibuni!"
+  };
+
+  function translatePestToSwahili() {
+    document.querySelector('h1').textContent = swahiliStrings["Pest Diagnosis"];
+    document.querySelector('h2').textContent = swahiliStrings["Pest Diagnosis Results"];
+    // Paragraph split into two for translation
+    const ps = document.querySelectorAll('.content > p');
+    if (ps.length > 0) {
+      ps[0].innerHTML = swahiliStrings["Based on the image you provided, the AI has identified the presence of aphids on your crop."] +
+        "<br>" +
+        swahiliStrings["Aphids are small, sap-sucking insects that can cause significant damage to plants by weakening them and transmitting diseases."];
+    }
+    // Recommendations
+    const recs = document.querySelectorAll('.recommendation');
+    if (recs.length > 0) {
+      recs[0].querySelector('h3').textContent = swahiliStrings["🌿 Natural Treatments"];
+      recs[0].querySelector('p').textContent = swahiliStrings["Apply neem oil or insecticidal soap to the affected areas. These natural treatments are effective and eco-friendly."];
+      recs[1].querySelector('h3').textContent = swahiliStrings["🕷️ Biological Control"];
+      recs[1].querySelector('p').textContent = swahiliStrings["Introduce natural predators like ladybugs or lacewings to your garden. These beneficial insects help reduce aphid populations."];
+      recs[2].querySelector('h3').textContent = swahiliStrings["🔍 Regular Monitoring"];
+      recs[2].querySelector('p').textContent = swahiliStrings["Regularly inspect your plants for signs of aphids. Early detection can prevent larger infestations."];
+    }
+    document.getElementById('detailsBtn').textContent = swahiliStrings["View More Details"];
+  }
+
+  function setupPestLanguage() {
+    let lang = localStorage.getItem('language') || 'en';
+    if (lang === 'sw') translatePestToSwahili();
+    // Adjust details button alert
+    document.getElementById('detailsBtn').onclick = function(e) {
+      e.preventDefault();
+      alert(lang === 'sw' ? swahiliStrings["More details coming soon!"] : 'More details coming soon!');
+    };
+  }
+  window.addEventListener('DOMContentLoaded', setupPestLanguage);
+  // Open Disease Diagnosis page (like Nuru AI) when "View More Details" is clicked
+  document.getElementById('detailsBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    // Replace 'disease-diagnosis.html' with your actual disease diagnosis page filename
+    window.location.href = 'disease-diagnosis.html';
+  });
+  // Universal language loader for all pages
+  window.addEventListener('DOMContentLoaded', function() {
+    const lang = localStorage.getItem('agriLang') || 'en';
+    // Set language selector if present
+    const langSel = document.getElementById('languageSelect');
+    if (langSel) langSel.value = lang;
+    // Call your translation function here, e.g.:
+    // updateLanguage(lang);
+  });
+</script>
+</body>
+</html>

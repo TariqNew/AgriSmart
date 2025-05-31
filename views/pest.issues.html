@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/pest issues.css">
+    <title>Pest Issue</title>
+</head>
+<body>
+
+
+     <div class="card">
+        <div class="wrapper">
+         <div class="start">
+         <button class="backButton"><img src="icons/arrow.png" class="arrow"> </button>
+         </div>
+         <div class="center">
+         <h1>Report Pest Issues</h1>
+         </div>
+        </div>
+
+        <div class="inputContainer">
+        <strong>Crop Type</strong>
+        <p></p>
+        <input type="text" placeholder="Type of crop" class="inputs">
+        <p></p>
+        <strong>Location</strong>
+        <P></P>
+        <input type="text" placeholder="Enter Location" class="inputs">
+        <p></p>
+        <strong>Description</strong>
+        <p></p>
+        <input type="text" placeholder="Describe The Pest Issue" class="inputDescription">
+       <p></p>
+       <strong>Add Image</strong>
+       
+       <div class="image-wrapper">
+         <h3>Upload Image</h3>
+         <p>Add images of the affected crops to help with<br>
+          diagnosis
+          <p></p>
+          <button id="uploadBtn">Upload</button>
+        </p>
+       </div>
+       <p></p>
+      <button class="submitButton" id="submitBtn">Submit Report</button>
+    </div>
+  </div>
+    
+  <script>
+  document.getElementById('uploadBtn').onclick = function() {
+    alert('Image upload coming soon!');
+  };
+  document.getElementById('submitBtn').onclick = function() {
+    alert('Report submitted! Thank you.');
+  };
+</script> 
+<script>
+  const swahiliStrings = {
+    "Report Pest Issues": "Ripoti Matatizo ya Wadudu",
+    "Crop Type": "Aina ya Zao",
+    "Description": "Maelezo",
+    "Submit Report": "Tuma Ripoti",
+    // ...add more as needed
+  };
+  function translatePestIssuesToSwahili() {
+    // Add selectors for your pest issue fields/buttons
+  }
+  function setupPestIssuesLanguage() {
+    let lang = localStorage.getItem('language') || 'en';
+    if (lang === 'sw') translatePestIssuesToSwahili();
+  }
+  window.addEventListener('DOMContentLoaded', setupPestIssuesLanguage);
+</script>
+<script>
+  // Universal language loader for all pages
+  window.addEventListener('DOMContentLoaded', function() {
+    const lang = localStorage.getItem('agriLang') || 'en';
+    // Set language selector if present
+    const langSel = document.getElementById('languageSelect');
+    if (langSel) langSel.value = lang;
+    // Call your translation function here, e.g.:
+    // updateLanguage(lang);
+  });
+</script>
+</body>
+</html>
